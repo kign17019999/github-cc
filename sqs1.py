@@ -20,8 +20,3 @@ response = sqs.receive_message(
 
 # Print the message body
 print(response['Messages'][0]['Body'])
-
-
-I
-
-
