@@ -5,7 +5,7 @@ sqs = boto3.client('sqs', region_name='us-east-1')
 
 # Send a message to the queue
 response = sqs.send_message(
-    QueueUrl='"https://sqs.us-east-1.amazonaws.com/183243280383/queue1",
+    QueueUrl="https://sqs.us-east-1.amazonaws.com/183243280383/queue1",
     MessageBody='Hello, World!'
 )
 
@@ -14,7 +14,7 @@ print(response['MessageId'])
 
 # Receive a message from the queue
 response = sqs.receive_message(
-    QueueUrl='"https://sqs.us-east-1.amazonaws.com/183243280383/queue1",
+    QueueUrl="https://sqs.us-east-1.amazonaws.com/183243280383/queue1",
     MaxNumberOfMessages=1
 )
 
