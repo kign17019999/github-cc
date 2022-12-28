@@ -4,7 +4,7 @@ import boto3
 sqs = boto3.client('sqs')
 
 # Set the URL of the queue
-queue_url = 'https://sqs.us-east-1.amazonaws.com/123456789012/my-queue'
+queue_url = 'https://sqs.us-east-1.amazonaws.com/183243280383/queue1'
 
 # Send a message to the queue
 response = sqs.send_message(
