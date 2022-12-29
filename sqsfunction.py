@@ -37,10 +37,6 @@ class SQSFunction:
             # Deserialize the message using json
             message = json.loads(message_body)
 
-            # Print the message and attributes
-            print(f'Message received: {message}')
-            print(f'Message attributes: {message_attributes}')
-
             # Delete the message from the queue
             self.sqs.delete_message(
                 QueueUrl=self.queue_url,
