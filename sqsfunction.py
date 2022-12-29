@@ -45,5 +45,3 @@ class SQSFunction:
         else:
             print('No messages in the queue')
             return None, None
-            
-        

@@ -1,4 +1,5 @@
 from sqsfunction import SQSFunction
+import numpy as np
 
 # Set the URL of the queue
 queue_url = 'https://sqs.us-east-1.amazonaws.com/183243280383/queue1'
@@ -7,8 +8,11 @@ region_name = 'us-east-1'
 # Create an instance of the SQSFunction class
 sqs_function = SQSFunction(queue_url, region_name)
 
+data = np.array([1, 2, 3, 4])
+data = data.tolist()
+
 # Send a message with message attributes
-message_id = sqs_function.send_message('Hello, World!', {
+message_id = sqs_function.send_message(data, {
     'MessageType': {
         'DataType': 'String',
         'StringValue': 'Greeting'
