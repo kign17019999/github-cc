@@ -5,7 +5,7 @@ queue_url = 'https://sqs.us-east-1.amazonaws.com/183243280383/queue1'
 region_name = 'us-east-1'
 
 # Create an instance of the SQSFunction class
-sqs_function = SQSFunction(queue_url, region_name = region_name)
+sqs_function = SQSFunction(queue_url = queue_url, region_name = region_name)
 
 # Send a message with message attributes
 message_id = sqs_function.send_message('Hello, World!', {

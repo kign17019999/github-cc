@@ -2,8 +2,8 @@ import boto3
 import pickle
 
 class SQSFunction:
-    def __init__(self, queue_url):
-        self.sqs = boto3.client('sqs')
+    def __init__(self, queue_url, region_name):
+        self.sqs = boto3.client('sqs', region_name=region_name)
         self.queue_url = queue_url
 
     def send_message(self, message, message_attributes):
