@@ -29,13 +29,21 @@ class SQSFunction:
 
         # Check if a message was received
         if 'Messages' in response:
-            # Get the message body
+            # Get the message body and attributes
             message_body = response['Messages'][0]['Body']
+            message_attributes = response['Messages'][0]['MessageAttributes']
 
             # Deserialize the message using json
             message = json.loads(message_body)
 
-            # Print the message
+            # Print the message and attributes
             print(f'Message received: {message}')
+            print(f'Message attributes: {message_attributes}')
+
+            # Return the message and attributes
+            return message, message_attributes
         else:
             print('No messages in the queue')
+            return None, None
+            
+        
