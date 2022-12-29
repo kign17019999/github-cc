@@ -7,11 +7,11 @@ def main():
     region_name = 'us-east-1'
     sqs_function = SQSFunction(queue_url, region_name)
     
-    available_worker = 10
+    available_worker = 3
     partition = 2
     axis = 0
-    m = 100
-    n = 300
+    m = 5
+    n = 5
     randF = 0
     randT = 10
     
@@ -29,7 +29,7 @@ def main():
         message_id = sqs_function.send_message(
             message = one_pack_of_matrixs,
             message_attributes = {
-                str(i%available_worker): {
+                'Worker': {
                     'DataType': 'String',
                     'StringValue': str(i%available_worker)
                 }
@@ -38,7 +38,7 @@ def main():
     ii = 0    
     while True:
         # Receive the message with the message attributes
-        message, message_attributes = sqs_function.receive_message([str(ii%available_worker)])
+        message, message_attributes = sqs_function.receive_message(['Worker'])
 
         if message is not None:
             print(f'Message received: {message}')
