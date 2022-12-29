@@ -18,3 +18,14 @@ while True:
     else:
         # Stop receiving messages if there are no more messages in the queue
         break
+        
+while True:
+    # Receive the message with the message attributes
+    message, message_attributes = sqs_function.receive_message(['Worker'])
+
+    if message is not None:
+        print(f'Message received: {message}')
+        print(f'Message attributes: {message_attributes}')
+    else:
+        # Stop receiving messages if there are no more messages in the queue
+        break
