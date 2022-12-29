@@ -7,11 +7,11 @@ def main():
     region_name = 'us-east-1'
     sqs_function = SQSFunction(queue_url, region_name)
     
-    available_worker = 2
+    available_worker = 10
     partition = 2
     axis = 0
-    m = 3
-    n = 3
+    m = 100
+    n = 300
     randF = 0
     randT = 10
     
