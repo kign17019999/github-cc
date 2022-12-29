@@ -9,29 +9,37 @@ class SQSFunction:
     def send_message(self, message, message_attributes):
         # Serialize the message using pickle
         serialized_message = pickle.dumps(message)
+        
+        # Convert the serialized message to a string
+        message_body = serialized_message.decode('utf-8')
 
         # Send the message with message attributes
         response = self.sqs.send_message(
             QueueUrl=self.queue_url,
-            MessageBody=serialized_message,
+            MessageBody=message_body,
             MessageAttributes=message_attributes
         )
 
         return response['MessageId']
 
-    def receive_message(self, message_attribute_names):
-        # Receive the message with the message attributes
+    def receive(self, message_attribute_names):
+        # Receive a message from the queue
         response = self.sqs.receive_message(
             QueueUrl=self.queue_url,
             MaxNumberOfMessages=1,
             MessageAttributeNames=message_attribute_names
         )
 
-        # Deserialize the message using pickle
+        # Check if a message was received
         if 'Messages' in response:
-            message = response['Messages'][0]
-            serialized_message = message['Body']
-            message = pickle.loads(serialized_message)
-            return message, message['MessageAttributes']
+            # Get the message body
+            message_body = response['Messages'][0]['Body']
+
+            # Deserialize the message using pickle
+            message = pickle.loads(message_body.encode('utf-8'))
+
+            # Print the message
+            print(f'Message received: {message}')
         else:
-            return None, None
+            print('No messages in the queue')
+            
