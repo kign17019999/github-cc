@@ -1,5 +1,5 @@
 import boto3
-import pickle
+import json
 
 class SQSFunction:
     def __init__(self, queue_url, region_name):
@@ -7,16 +7,13 @@ class SQSFunction:
         self.queue_url = queue_url
 
     def send_message(self, message, message_attributes):
-        # Serialize the message using pickle
-        serialized_message = pickle.dumps(message)
-        
-        # Convert the serialized message to a string
-        message_body = serialized_message
+        # Serialize the message using json
+        serialized_message = json.dumps(message)
 
         # Send the message with message attributes
         response = self.sqs.send_message(
             QueueUrl=self.queue_url,
-            MessageBody=message_body,
+            MessageBody=serialized_message,
             MessageAttributes=message_attributes
         )
 
@@ -35,11 +32,10 @@ class SQSFunction:
             # Get the message body
             message_body = response['Messages'][0]['Body']
 
-            # Deserialize the message using pickle
-            message = pickle.loads(message_body)
+            # Deserialize the message using json
+            message = json.loads(message_body)
 
             # Print the message
             print(f'Message received: {message}')
         else:
             print('No messages in the queue')
-            
