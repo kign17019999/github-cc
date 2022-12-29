@@ -28,7 +28,12 @@ def main():
         one_pack_of_matrixs = [index, sub_mat1, sub_mat2]
         message_id = sqs_function.send_message(
             message = one_pack_of_matrixs,
-            message_attributes = [str(i%available_worker)]
+            message_attributes = {
+                str(i%available_worker): {
+                    'DataType': 'String',
+                    'StringValue': i%available_worker
+                }
+            } 
         )
     ii = 0    
     while True:
