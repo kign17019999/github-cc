@@ -28,7 +28,7 @@ class SQSFunction:
         )
 
         # Check if a message was received
-        if 'Messages' in response['Messages'][0]:
+        if 'Messages' in response:
             # Get the message body, attributes, and receipt handle
             message_body = response['Messages'][0]['Body']
             message_attributes = response['Messages'][0]['MessageAttributes']
