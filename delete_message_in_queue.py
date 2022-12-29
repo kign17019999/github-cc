@@ -10,7 +10,7 @@ sqs_function = SQSFunction(queue_url, region_name)
 # Receive all messages in the queue
 while True:
     # Receive the message with the message attributes
-    message, message_attributes = sqs_function.receive_message(['MessageType'])
+    message, message_attributes = sqs_function.receive_message()
 
     if message is not None:
         print(f'Message received: {message}')
