@@ -1,6 +1,5 @@
 import boto3
 import pickle
-#test kuasdsadsad
 
 class SQSFunction:
     def __init__(self, queue_url, region_name):
@@ -12,7 +11,7 @@ class SQSFunction:
         serialized_message = pickle.dumps(message)
         
         # Convert the serialized message to a string
-        message_body = serialized_message.encode('utf-8')
+        message_body = serialized_message
 
         # Send the message with message attributes
         response = self.sqs.send_message(
@@ -37,7 +36,7 @@ class SQSFunction:
             message_body = response['Messages'][0]['Body']
 
             # Deserialize the message using pickle
-            message = pickle.loads(message_body.decode('utf-8'))
+            message = pickle.loads(message_body)
 
             # Print the message
             print(f'Message received: {message}')
