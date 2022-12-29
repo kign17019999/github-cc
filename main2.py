@@ -3,7 +3,7 @@ from matrixparallel import MatrixParallel
 import numpy as np
 
 def main():
-    queue_url = 'https://sqs.us-east-1.amazonaws.com/183243280383/queue1'
+    queue_url = 'https://sqs.us-east-1.amazonaws.com/183243280383/queue2'
     region_name = 'us-east-1'
     sqs_function = SQSFunction(queue_url, region_name)
     
