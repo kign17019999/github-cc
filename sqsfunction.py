@@ -11,7 +11,7 @@ class SQSFunction:
         serialized_message = pickle.dumps(message)
         
         # Convert the serialized message to a string
-        message_body = serialized_message.decode('utf-8')
+        message_body = serialized_message.encode('utf-8')
 
         # Send the message with message attributes
         response = self.sqs.send_message(
@@ -36,7 +36,7 @@ class SQSFunction:
             message_body = response['Messages'][0]['Body']
 
             # Deserialize the message using pickle
-            message = pickle.loads(message_body.encode('utf-8'))
+            message = pickle.loads(message_body.decode('utf-8'))
 
             # Print the message
             print(f'Message received: {message}')
