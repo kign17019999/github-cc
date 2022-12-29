@@ -31,7 +31,7 @@ def main():
             message_attributes = {
                 str(i%available_worker): {
                     'DataType': 'String',
-                    'StringValue': i%available_worker
+                    'StringValue': str(i%available_worker)
                 }
             } 
         )
