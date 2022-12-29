@@ -19,7 +19,7 @@ class SQSFunction:
 
         return response['MessageId']
 
-    def receive(self, message_attribute_names):
+    def receive_message(self, message_attribute_names):
         # Receive a message from the queue
         response = self.sqs.receive_message(
             QueueUrl=self.queue_url,
