@@ -1,3 +1,6 @@
+import boto3
+import json
+
 class SQSFunction:
     def __init__(self, queue_url, region_name):
         self.sqs = boto3.client('sqs', region_name=region_name)
