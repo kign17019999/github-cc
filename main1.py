@@ -8,7 +8,7 @@ region_name = 'us-east-1'
 # Create an instance of the SQSFunction class
 sqs_function = SQSFunction(queue_url, region_name)
 
-data = np.array([1, 2, 3, 4])
+data = np.array([1, 2, 3, 4, 6, 7])
 data = data.tolist()
 
 # Send a message with message attributes

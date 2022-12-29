@@ -29,9 +29,10 @@ class SQSFunction:
 
         # Check if a message was received
         if 'Messages' in response:
-            # Get the message body and attributes
+            # Get the message body, attributes, and receipt handle
             message_body = response['Messages'][0]['Body']
             message_attributes = response['Messages'][0]['MessageAttributes']
+            receipt_handle = response['Messages'][0]['ReceiptHandle']
 
             # Deserialize the message using json
             message = json.loads(message_body)
@@ -39,6 +40,12 @@ class SQSFunction:
             # Print the message and attributes
             print(f'Message received: {message}')
             print(f'Message attributes: {message_attributes}')
+
+            # Delete the message from the queue
+            self.sqs.delete_message(
+                QueueUrl=self.queue_url,
+                ReceiptHandle=receipt_handle
+            )
 
             # Return the message and attributes
             return message, message_attributes
