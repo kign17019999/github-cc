@@ -26,7 +26,7 @@ def main():
         sub_mat1 = matlist[1][i] 
         sub_mat2 = matlist[2][i]
         one_pack_of_matrixs = [index, sub_mat1, sub_mat2]
-        message_id = sqs_function.send_messages(
+        message_id = sqs_function.send_message(
             message = one_pack_of_matrixs,
             message_attributes = [str(i%available_worker)]
         )
