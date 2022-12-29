@@ -22,7 +22,7 @@ message_id = sqs_function.send_message(data, {
 print(f'Message sent with ID: {message_id}')
 
 # Receive the message with the message attributes
-message, message_attributes = sqs_function.receive_message()
+message, message_attributes = sqs_function.receive_message(['MessageType'])
 
 if message is not None:
     print(f'Message received: {message}')
