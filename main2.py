@@ -38,17 +38,16 @@ def main():
     ii = 0    
     while True:
         # Receive the message with the message attributes
-        if 'MessageAttributes' in response['Messages'][0]:
-            message, message_attributes = sqs_function.receive_message([str(ii%available_worker)])
+        message, message_attributes = sqs_function.receive_message([str(ii%available_worker)])
 
-            if message is not None:
-                print(f'Message received: {message}')
-                print(f'Message attributes: {message_attributes}')
-            else:
-                # Stop receiving messages if there are no more messages in the queue
-                break
-            
-            ii+=1
+        if message is not None:
+            print(f'Message received: {message}')
+            print(f'Message attributes: {message_attributes}')
+        else:
+            # Stop receiving messages if there are no more messages in the queue
+            break
+        
+        ii+=1
 
     
 if __name__ == '__main__':
