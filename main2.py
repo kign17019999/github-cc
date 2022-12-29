@@ -8,10 +8,10 @@ def main():
     sqs_function = SQSFunction(queue_url, region_name)
     
     available_worker = 3
-    partition = 2
+    partition = 4
     axis = 0
-    m = 5
-    n = 5
+    m = 10
+    n = 10
     randF = 0
     randT = 10
     
@@ -34,8 +34,7 @@ def main():
                     'StringValue': str(i%available_worker)
                 }
             } 
-        )
-    ii = 0    
+        )  
     while True:
         # Receive the message with the message attributes
         message, message_attributes = sqs_function.receive_message(['Worker'])
@@ -46,8 +45,6 @@ def main():
         else:
             # Stop receiving messages if there are no more messages in the queue
             break
-        
-        ii+=1
 
     
 if __name__ == '__main__':
