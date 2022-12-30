@@ -41,11 +41,12 @@ class SQSFunction:
         
         # Check if a message was received
         if 'Messages' in response:
-            if attribute_value:
-                message_attribute_value = response['Messages'][0]['MessageAttributes'][attribute_name]['StringValue']
-                if message_attribute_value != attribute_value:
-                    print('No messages in the queue')
-                    return None, None
+            if 'MessageAttributes' in response['Messages'][0]:
+                if attribute_value:
+                    message_attribute_value = response['Messages'][0]['MessageAttributes'][attribute_name]['StringValue']
+                    if message_attribute_value != attribute_value:
+                        print('No messages in the queue')
+                        return None, None
             # Get the message body, attributes, and receipt handle
             message_body = response['Messages'][0]['Body']
             if attribute_name:

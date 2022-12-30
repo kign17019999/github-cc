@@ -34,6 +34,7 @@ def main():
                     'StringValue': str(i%available_worker)
                 }
             } 
+        print(f'message_id: {message_id}')
         )
     
     
