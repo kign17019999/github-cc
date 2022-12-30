@@ -37,7 +37,7 @@ def main():
         )  
     while True:
         # Receive the message with the message attributes
-        message, message_attributes = sqs_function.receive_message(['Worker'])
+        message, message_attributes = sqs_function.receive_message()
 
         if message is not None:
             print(f'Message received: {message}')
