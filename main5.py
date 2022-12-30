@@ -53,7 +53,6 @@ def main():
         message = sqs_function2.receive_message()
         if message is not None:
             all_result.append(message)
-        time = time.time()
         if time.time()-start_time > 5:
             start_time = time.time()
             print(f'trying to reciving...{len(all_result)}/{partition} ')
