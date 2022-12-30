@@ -2,7 +2,7 @@ from sqsfunction import SQSFunction
 import numpy as np
 
 # Set the URL of the queue
-queue_url = 'https://sqs.us-east-1.amazonaws.com/183243280383/queue2'
+queue_url = 'https://sqs.us-east-1.amazonaws.com/183243280383/queue_to_worker'
 region_name = 'us-east-1'
 
 # Create an instance of the SQSFunction class

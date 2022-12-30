@@ -11,7 +11,7 @@ class SQSFunction:
         serialized_message = json.dumps(message)
 
         # Send the message with message attributes (if specified)
-        if message_attributes:
+        if attribute_name:
             response = self.sqs.send_message(
                 QueueUrl=self.queue_url,
                 MessageBody=serialized_message,
