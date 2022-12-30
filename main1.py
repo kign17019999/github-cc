@@ -14,7 +14,7 @@ data = data.tolist()
 # Send a message w/ message attributes
 message_id = sqs_function.send_message(data, {
     'Worker': {
-        'Worker_number': '1',
+        'StringValue': '1',
         'DataType': 'String'
         
     }
