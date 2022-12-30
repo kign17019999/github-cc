@@ -67,19 +67,6 @@ def main():
         final_result = mp.combine_addition(list_of_results = all_result, axis = axis)
         print(final_result == mat1+mat2)
             
-        
-
-
-
-
-
-
-
-
-
-
-
-        
     while True:
         # Receive the message with the message attributes
         message, message_attributes = sqs_function.receive_message()
