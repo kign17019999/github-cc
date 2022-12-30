@@ -31,7 +31,7 @@ data = np.array([2, 2, 2])
 data = data.tolist()
 
 # Send a message w/ message attributes
-message_id = sqs_function.send_message()
+message_id = sqs_function.send_message(message=data)
 
 print(f'Message sent with ID: {message_id}')
 
