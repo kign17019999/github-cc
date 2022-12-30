@@ -32,7 +32,7 @@ class MatrixParallel:
         matrix2 = np.array(one_pack_of_matrixs[2])
         result = matrix1+matrix2
         result_one_pack_of_matrixs = []
-        result_one_pack_of_matrixs.append([axis_indices])
+        result_one_pack_of_matrixs.append(axis_indices)
         result_one_pack_of_matrixs.append(result.tolist())
         return result_one_pack_of_matrixs
     

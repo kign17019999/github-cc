@@ -69,3 +69,52 @@ class SQSFunction:
         else:
             print('No messages in the queue')
             return None, None
+
+
+
+    def receive_message_no_delete(self, attribute_name=None, attribute_value=None):
+        # Receive a message from the queue with message attributes (if specified)
+        if attribute_name:
+            response = self.sqs.receive_message(
+                QueueUrl=self.queue_url,
+                MaxNumberOfMessages=1,
+                MessageAttributeNames=[attribute_name]
+            )
+        else:
+            response = self.sqs.receive_message(
+                QueueUrl=self.queue_url,
+                MaxNumberOfMessages=1
+            )        
+        
+        # Check if a message was received
+        if 'Messages' in response:
+            if 'MessageAttributes' in response['Messages'][0]:
+                if attribute_value:
+                    message_attribute_value = response['Messages'][0]['MessageAttributes'][attribute_name]['StringValue']
+                    if message_attribute_value != attribute_value:
+                        print('No messages in the queue')
+                        return None, None
+            # Get the message body, attributes, and receipt handle
+            message_body = response['Messages'][0]['Body']
+            if attribute_name:
+                message_attributes = response['Messages'][0]['MessageAttributes']
+            else:
+                message_attributes = None
+            receipt_handle = response['Messages'][0]['ReceiptHandle']
+
+            # Deserialize the message using json
+            message = json.loads(message_body)
+
+            # Return the message and attributes
+            return message, message_attributes
+        else:
+            print('No messages in the queue')
+            return None, None
+            
+            
+    def delete_message_in_queue(self, receipt_handle):
+        self.sqs.delete_message(
+            QueueUrl=self.queue_url,
+            ReceiptHandle=receipt_handle
+        )
+        

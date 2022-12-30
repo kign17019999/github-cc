@@ -58,18 +58,22 @@ def main():
                         }
                     }
                 )
+                print(f'message_id: {message_id}')
                 num_for_each_worker[i]-=1
+                print(f'fum: {num_for_each_worker}')
 
 
-        print('start combinding...')
-        all_result = []
+    print('start combinding...')
+    all_result = []
+    while len(all_result) != partition:
+        message, message_attributes = sqs_function.receive_message(attribute_name='Master', attribute_value=str(1))
+        if message is not None:
+            print(f'Message attributes: {message_attributes}')
+            all_result.append(message)
 
-        while len(all_result) != partition:
-            message, message_attributes = sqs_function.receive_message(attribute_name='Master', attribute_value=str(1))
-            if message is not None:
-                print(f'Message attributes: {message_attributes}')
-                all_result.append(message)
+    final_result = mp.combine_addition(list_of_results = all_result, axis = axis)
+    print(final_result == mat1+mat2)
 
-        final_result = mp.combine_addition(list_of_results = all_result, axis = axis)
-        print(final_result == mat1+mat2)
 
+if __name__ == '__main__':
+    main()
