@@ -36,10 +36,9 @@ message_id = sqs_function.send_message(message=data)
 print(f'Message sent with ID: {message_id}')
 
 # Receive the message w/ the message attributes
-message, message_attributes = sqs_function.receive_message()
+message = sqs_function.receive_message()
 
 if message is not None:
     print(f'Message received: {message}')
-    print(f'Message attributes: {message_attributes}')
 else:
     print('No messages in the queue')

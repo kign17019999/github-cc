@@ -76,10 +76,15 @@ class SQSFunction:
             )
 
             # Return the message and attributes
-            return message, message_attributes
+            if attribute_name:
+                return message, message_attributes
+            else:
+                return message
         else:
-            print('No messages in the queue')
-            return None, None
+            if attribute_name:
+                return None, None
+            else:
+                return None
 
 
 
@@ -122,10 +127,15 @@ class SQSFunction:
             message = json.loads(message_body)
 
             # Return the message and attributes
-            return message, message_attributes
+            if attribute_name:
+                return message, message_attributes
+            else:
+                return message
         else:
-            print('No messages in the queue')
-            return None, None
+            if attribute_name:
+                return None, None
+            else:
+                return None
             
             
     def delete_message_in_queue(self, receipt_handle):
