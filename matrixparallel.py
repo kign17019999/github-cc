@@ -32,14 +32,14 @@ class MatrixParallel:
         matrix2 = np.array(one_pack_of_matrixs[2])
         result = matrix1+matrix2
         result_one_pack_of_matrixs = []
-        result_one_pack_of_matrixs.append(axis_indices)
-        result_one_pack_of_matrixs.append(result)
+        result_one_pack_of_matrixs.append([axis_indices])
+        result_one_pack_of_matrixs.append(result.tolist())
         return result_one_pack_of_matrixs
     
     def combine_addition(self, list_of_results, axis = 0):
         dict_result = {}
         for i in range(len(list_of_results)):
-            temp_dict = {list_of_results[i][0]:list_of_results[i][1]}
+            temp_dict = {list_of_results[i][0]:np.array(list_of_results[i][1])}
             dict_result.update(temp_dict)
         
         final_array = dict_result[0]
