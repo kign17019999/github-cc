@@ -27,12 +27,18 @@ class SQSFunction:
 
     def receive_message(self, attribute_name=None, attribute_value=None):
         # Receive a message from the queue with message attributes (if specified)
-        response = self.sqs.receive_message(
-            QueueUrl=self.queue_url,
-            MaxNumberOfMessages=1,
-            if attribute_name: MessageAttributeNames=[attribute_name]
-        )
-
+        if attribute_name:
+            response = self.sqs.receive_message(
+                QueueUrl=self.queue_url,
+                MaxNumberOfMessages=1,
+                MessageAttributeNames=[attribute_name]
+            )
+        else:
+            response = self.sqs.receive_message(
+                QueueUrl=self.queue_url,
+                MaxNumberOfMessages=1
+            )        
+        
         # Check if a message was received
         if 'Messages' in response:
             if attribute_value:
