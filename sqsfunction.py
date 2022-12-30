@@ -42,8 +42,8 @@ class SQSFunction:
         # Check if a message was received
         if 'Messages' in response:
             if attribute_value:
-                message_attribute_value = response['Messages'][0]['MessageAttributes']['attribute_name']['StringValue']
-                if message_attribute_value !== attribute_value:
+                message_attribute_value = response['Messages'][0]['MessageAttributes'][attribute_name]['StringValue']
+                if message_attribute_value != attribute_value:
                     print('No messages in the queue')
                     return None, None
             # Get the message body, attributes, and receipt handle
@@ -58,17 +58,13 @@ class SQSFunction:
             message = json.loads(message_body)
 
             # Delete the message from the queue
-            delete_message(self, receipt_handle)
+            self.sqs.delete_message(
+                QueueUrl=self.queue_url,
+                ReceiptHandle=receipt_handle
+            )
 
             # Return the message and attributes
             return message, message_attributes
         else:
             print('No messages in the queue')
             return None, None
-            
-    def delete_message(self, message_receipt):
-        # Delete the message from the queue
-        self.sqs.delete_message(
-            QueueUrl=self.queue_url,
-            ReceiptHandle=message_receipt
-            
