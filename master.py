@@ -15,10 +15,10 @@ def main():
 
     print('acting as a master')
 
-    partition = 200
+    partition = 1000
     axis = 0
-    m = 2000
-    n = 2000
+    m = 10000
+    n = 10000
     randF = 0
     randT = 10
 
@@ -42,6 +42,7 @@ def main():
         if time.time()-start_time > 5:
             start_time = time.time()
             print(f'trying to sending...{i}/{partition} ')
+    print(f'finishing sending...{partition}/{partition} ')
     
     print('start getting result...')
     all_result = []
