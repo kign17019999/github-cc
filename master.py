@@ -12,12 +12,10 @@ def main():
     region_name2 = 'us-east-1'
     sqs_function2 = SQSFunction(queue_url2, region_name2)
 
-
-    available_worker = 5
-    partition = 5
+    partition = 200
     axis = 0
-    m = 1500
-    n = 1500
+    m = 2000
+    n = 2000
     randF = 0
     randT = 10
 
@@ -39,23 +37,6 @@ def main():
         if time.time()-start_time > 5:
             start_time = time.time()
             print(f'trying to sending...{i}/{partition} ')
-
-    print(f'trying to processing...{partition}/{partition} ')
-    
-    start_time = time.time()
-    print('start receving & processing & send to master_queue')
-    for i in range(partition):
-        #print(f'trying in worker {i%available_worker}')
-        message = sqs_function1.receive_message()
-        if message is not None:
-            result = mp.addition(message)
-            message_id = sqs_function2.send_message(message=result)
-            #print(f'{i}: message_id: {message_id}')
-        if time.time()-start_time > 5:
-            start_time = time.time()
-            print(f'trying to processing...{i}/{partition} ')
-
-    print(f'trying to processing...{partition}/{partition} ')
     
     print('start getting result...')
     all_result = []
