@@ -2,7 +2,6 @@ from sqsfunction import SQSFunction
 from matrixparallel import MatrixParallel
 import numpy as np
 import time
-import psutil
 
 def main():
     queue_url1 = 'https://sqs.us-east-1.amazonaws.com/183243280383/queue_to_worker'
