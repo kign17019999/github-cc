@@ -40,11 +40,8 @@ def main():
         if time.time()-start_time > 5:
             start_time = time.time()
             print(f'trying to sending...{i}/{partition} ')
-            memory_info = psutil.virtual_memory()
-            print(f'...Total physical memory: {memory_info.total / (1024 * 1024):.2f} MB')
+
     print(f'trying to processing...{partition}/{partition} ')
-     memory_info = psutil.virtual_memory()
-    print(f'...Total physical memory: {memory_info.total / (1024 * 1024):.2f} MB')
     
     start_time = time.time()
     print('start receving & processing & send to master_queue')
@@ -58,11 +55,8 @@ def main():
         if time.time()-start_time > 5:
             start_time = time.time()
             print(f'trying to processing...{i}/{partition} ')
-            memory_info = psutil.virtual_memory()
-            print(f'...Total physical memory: {memory_info.total / (1024 * 1024):.2f} MB')
+
     print(f'trying to processing...{partition}/{partition} ')
-    memory_info = psutil.virtual_memory()
-    print(f'...Total physical memory: {memory_info.total / (1024 * 1024):.2f} MB')
     
     print('start combinding...')
     all_result = []
@@ -74,11 +68,8 @@ def main():
         if time.time()-start_time > 5:
             start_time = time.time()
             print(f'trying to reciving...{len(all_result)}/{partition} ')
-            memory_info = psutil.virtual_memory()
-            print(f'...Total physical memory: {memory_info.total / (1024 * 1024):.2f} MB')
+            
     print(f'trying to processing...{partition}/{partition} ')
-    memory_info = psutil.virtual_memory()
-    print(f'...Total physical memory: {memory_info.total / (1024 * 1024):.2f} MB')
 
     final_result = mp.combine_addition(list_of_results = all_result, axis = axis)
     print(final_result == mat1+mat2)
