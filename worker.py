@@ -15,7 +15,8 @@ def main():
     # metrix operation
     mp = MatrixParallel()
     
-    print('start receving & processing & send to master_queue.....')
+    print('acting as a worker')
+    print('start receving & processing & send to master_queue...')
     i = 0
     while True:
         message = sqs_function1.receive_message()

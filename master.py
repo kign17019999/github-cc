@@ -12,6 +12,8 @@ def main():
     region_name2 = 'us-east-1'
     sqs_function2 = SQSFunction(queue_url2, region_name2)
 
+    print('acting as a master')
+
     partition = 200
     axis = 0
     m = 2000
