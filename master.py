@@ -15,7 +15,7 @@ def main():
 
     print('acting as a master')
 
-    partition = 500
+    partition = 1000
     axis = 0
     m = 2000
     n = 2000
@@ -44,6 +44,7 @@ def main():
             print(f'trying to sending...{i}/{partition} ')
     print(f'finishing sending...{partition}/{partition} ')
     
+    start_time_getting_result = time.time()
     print('start getting result...')
     all_result = []
     start_time = time.time()
@@ -55,7 +56,7 @@ def main():
             start_time = time.time()
             print(f'trying to get results...{len(all_result)}/{partition} ')
     
-    print(f'time after getting all result: {time.time()-start_time0}')       
+    print(f'time getting all result: {time.time()-start_time_getting_result}')       
     print(f'trying to combinding...{partition}/{partition} ')
 
     final_result = mp.combine_addition(list_of_results = all_result, axis = axis)
