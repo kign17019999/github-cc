@@ -1,4 +1,5 @@
 import numpy as np
+import time
 
 class MatrixParallel:
     def __init__(self):

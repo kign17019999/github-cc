@@ -15,10 +15,10 @@ def main():
 
     print('acting as a master')
 
-    partition = 1000
+    partition = 500
     axis = 0
-    m = 10000
-    n = 10000
+    m = 2000
+    n = 2000
     randF = 0
     randT = 10
 
@@ -54,7 +54,8 @@ def main():
         if time.time()-start_time > 5:
             start_time = time.time()
             print(f'trying to get results...{len(all_result)}/{partition} ')
-            
+    
+    print(f'time after getting all result: {time.time()-start_time0}')       
     print(f'trying to combinding...{partition}/{partition} ')
 
     final_result = mp.combine_addition(list_of_results = all_result, axis = axis)
