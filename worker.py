@@ -12,6 +12,9 @@ def main():
     region_name2 = 'us-east-1'
     sqs_function2 = SQSFunction(queue_url2, region_name2)
     
+    # metrix operation
+    mp = MatrixParallel()
+    
     print('start receving & processing & send to master_queue')
     i = 0
     while True:
