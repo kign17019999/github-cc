@@ -4,6 +4,7 @@ import numpy as np
 import time
 
 def main():
+    
     queue_url1 = 'https://sqs.us-east-1.amazonaws.com/183243280383/queue_to_worker'
     region_name1 = 'us-east-1'
     sqs_function1 = SQSFunction(queue_url1, region_name1)
@@ -26,6 +27,8 @@ def main():
     mat1 = mp.gen_matrix(m,n,randF,randT)
     mat2 = mp.gen_matrix(m,n,randF,randT)
     matlist = mp.decompose_for_addition(mat1, mat2, partition, axis = axis)
+    
+    start_time0 = time.time()
     
     start_time = time.time()
     print('start sending..')
@@ -54,7 +57,18 @@ def main():
     print(f'trying to combinding...{partition}/{partition} ')
 
     final_result = mp.combine_addition(list_of_results = all_result, axis = axis)
-    print(final_result == mat1+mat2)
+    
+    totle_dist_time = time.time()-start_time0
+    
+    start_time1 = time.time()
+    result_with_local = mat1+mat2
+    totle_local_time = time.time()-start_time1
+    
+    
+    print(final_result == result_with_local)
+    
+    print(f'total time dist : {totle_dist_time}')
+    print(f'total time local: {totle_local_time}')
 
 
 if __name__ == '__main__':
