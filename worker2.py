@@ -1,5 +1,5 @@
 from sqsfunction import SQSFunction
-from matrixparallel import MatrixParallel
+from matrixparallel_v2 import MatrixParallel
 import numpy as np
 import time
 
