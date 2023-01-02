@@ -52,7 +52,7 @@ def main():
             num_send_with_max-=1
         else:
             num_in_msg = min_msg_each_send
-        for j in num_in_msg:
+        for j in range(num_in_msg):
             one_pack_of_matrixs = pack_of_matrixs[num_in_pack_of_matrixs]
             set_pack_of_matrixs.append(one_pack_of_matrixs)
             num_in_pack_of_matrixs+=1
@@ -98,7 +98,7 @@ def main():
     print(f'time getting all result: {time.time()-start_time_getting_result}')       
     
     final_result = mp.get_result_addition()
-       
+
     totle_dist_time = time.time()-start_time0
     
     start_time1 = time.time()

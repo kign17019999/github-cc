@@ -23,7 +23,7 @@ def main():
         if message is not None:
             num_in_msg = len(message)
             results = []
-            for j in num_in_msg:
+            for j in range(num_in_msg):
                 one_result = mp.addition(message[j])
                 results.append(one_result)
             message_id = sqs_function2.send_message(message=result)
