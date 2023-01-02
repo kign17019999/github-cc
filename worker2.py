@@ -26,7 +26,7 @@ def main():
             for j in range(num_in_msg):
                 one_result = mp.addition(message[j])
                 results.append(one_result)
-            message_id = sqs_function2.send_message(message=result)
+            message_id = sqs_function2.send_message(message=results)
             count+=1
             print(f'{count}: message_id: {message_id}')
 

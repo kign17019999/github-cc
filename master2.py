@@ -67,6 +67,7 @@ def main():
     print('start getting result...')
     start_time = time.time()
     no_msg_time = time.time()
+    count_get = 0
     while True:
         message = sqs_function2.receive_message()
         if message is not None:
@@ -77,6 +78,7 @@ def main():
                 if ikey in dict_of_matrixs:
                     status_combine = mp.combine_addition(one_result)
                     del dict_of_matrixs[ikey]
+                    count_get+=1
             no_msg_time = time.time()
         if time.time()-no_msg_time > 15:
             print(f'no message for 15s, try to check the black result')            
@@ -93,7 +95,7 @@ def main():
 
         if time.time()-start_time > 5:
             start_time = time.time()
-            print(f'trying to get results...{len(all_result)}/{partition} ')
+            print(f'trying to get results...{count_get}/{partition} ')
     
     print(f'time getting all result: {time.time()-start_time_getting_result}')       
     
