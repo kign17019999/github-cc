@@ -15,10 +15,10 @@ def main():
 
     print('acting as a master')
 
-    partition = 1000
+    partition = 100
     axis = 0
-    m = 2000
-    n = 2000
+    m = 1000
+    n = 1000
     randF = 0
     randT = 10
 
@@ -72,7 +72,7 @@ def main():
     
     print(f'total time dist : {totle_dist_time}')
     print(f'total time local: {totle_local_time}')
-
+    
 
 if __name__ == '__main__':
     main()

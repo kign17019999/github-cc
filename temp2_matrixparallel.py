@@ -1,0 +1,128 @@
+import numpy as np
+import time
+
+"""
+class definition
+...
+"""
+
+class MatrixParallel:
+    def __init__(self):
+        self.result_addition = np.empty(0)
+        self.result_multiplication = np.empty(0)
+        
+    
+    def gen_matrix(self, rowSize, columnSize, randFrom, randTo):
+        # create random number in given size of array 
+        # and the range of random number which will be a value in each element
+        matrix = np.random.randint(randFrom, randTo, size = (rowSize, columnSize))
+        
+        return matrix
+    
+    def decompose_for_addition(self, matrix1, matrix2, partition):
+
+        sub_matrixs1 = np.array_split(matrix1, partition, axis = 0)
+        sub_matrixs2 = np.array_split(matrix2, partition, axis = 0)
+        axis_indices = np.arange(partition)
+        
+        list_of_sub_matrixs1 = [array.tolist() for array in sub_matrixs1]
+        list_of_sub_matrixs2 = [array.tolist() for array in sub_matrixs2]
+        list_of_axis_indices = axis_indices.tolist()
+        pack_of_matrixs = [list_of_axis_indices, list_of_sub_matrixs1, list_of_sub_matrixs2]
+
+        return pack_of_matrixs
+    
+    def addition(self, one_pack_of_matrixs):
+        axis_indices = one_pack_of_matrixs[0]
+        matrix1 = np.array(one_pack_of_matrixs[1])
+        matrix2 = np.array(one_pack_of_matrixs[2])
+        result = matrix1+matrix2
+        result_one_pack_of_matrixs = []
+        result_one_pack_of_matrixs.append(axis_indices)
+        result_one_pack_of_matrixs.append(result.tolist())
+        return result_one_pack_of_matrixs
+    
+    def combine_addition(self, list_of_results, axis = 0):
+        dict_result = {}
+        for i in range(len(list_of_results)):
+            temp_dict = {list_of_results[i][0]:np.array(list_of_results[i][1])}
+            dict_result.update(temp_dict)
+        
+        final_array = dict_result[0]
+        for i in range(len(list_of_results)):
+            if i==0:
+                pass
+            else:
+                final_array = np.vstack((final_array,dict_result[i]))
+        if axis == 1: final_array = final_array.transpose()
+            
+        return final_array
+
+    def get_result_multiplication(self):
+        return self.result_addition
+
+
+    def decompose_for_multiplication(self, matrix1, matrix2, partition):
+        sub_matrixs1 = np.vsplit(matrix1, matrix1.shape[0])
+        sub_matrixs2 = np.hsplit(matrix2, matrix2.shape[1])
+        
+        result_row = matrix1.shape[0]
+        result_col = matrix2.shape[1]
+        self.result_multiplication = np.zeros((result_row, result_col))
+
+        pack_of_matrixs = []
+        dict_of_matrixs = {}
+        
+        index = 0
+
+        if result_row*result_col < partition:
+            min_in_each_parition  = partition//(result_row*result_col)
+        else:
+            min_in_each_parition = 1
+        max_in_each_parition  = min_in_each_parition+1
+        num_max_in_each_parition = partition%(result_row*result_col)
+        
+        for i in range(result_row):
+            for j in range(result_col):
+                if num_max_in_each_parition != 0:
+                    sub_of_sub_matrixs1 = np.array_split(sub_matrixs1[i], max_in_each_parition, axis = 1)
+                    sub_of_sub_matrixs2 = np.array_split(sub_matrixs2[j], max_in_each_parition, axis = 0)
+                    len_sub_of_sub = max_in_each_parition
+                    num_max_in_each_parition-=1
+                else:
+                    sub_of_sub_matrixs1 = np.array_split(sub_matrixs1[i], min_in_each_parition, axis = 1)
+                    sub_of_sub_matrixs2 = np.array_split(sub_matrixs2[j], min_in_each_parition, axis = 0)   
+                    len_sub_of_sub = min_in_each_parition    
+                for sub_index in range(len_sub_of_sub):
+                  a = sub_of_sub_matrixs1[sub_index].tolist()
+                  b = sub_of_sub_matrixs2[sub_index].tolist()
+                  one_pack_of_matrixs = [[index], [sub_index], a, b]
+                  pack_of_matrixs.append(one_pack_of_matrixs)
+                  dict_of_matrixs.update({f'{index}-{sub_index}':None})
+                index+=1
+
+        return pack_of_matrixs, dict_of_matrixs
+    
+    def multiplication(self, one_pack_of_matrixs):
+        index = one_pack_of_matrixs[0]
+        sub_index = one_pack_of_matrixs[1]
+        a = np.array(one_pack_of_matrixs[2])
+        b = np.array(one_pack_of_matrixs[3])
+        result = np.dot(a,b)
+        result_one_pack_of_matrixs = []
+        result_one_pack_of_matrixs.append(index)
+        result_one_pack_of_matrixs.append(sub_index)
+        result_one_pack_of_matrixs.append(result.tolist())
+        
+        return result_one_pack_of_matrixs
+    
+    def combine_multiplication(self, result_one_pack_of_matrixs):
+        index = result_one_pack_of_matrixs[0]
+        index_row = index[0]//self.result_multiplication.shape[1]
+        index_col = index[0]%self.result_multiplication.shape[1]
+        self.result_multiplication[index_row][index_col] +=result_one_pack_of_matrixs[2][0]
+        
+        return 'this combine is done'
+
+    def get_result_multiplication(self):
+        return self.result_multiplication

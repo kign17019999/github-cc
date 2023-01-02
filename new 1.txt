@@ -1,0 +1,20 @@
+import math
+
+# Maximum message size in bytes
+MAX_MESSAGE_SIZE = 262144  # 256 KB
+
+# Array of data to be sent
+data = [1, 2, 3, 4, 5, 6, 7, 8, 9, 10]
+
+# Calculate the number of messages needed to send the data
+num_messages = math.ceil(len(data) * data[0].itemsize / MAX_MESSAGE_SIZE)
+
+# Calculate the size of each message
+message_size = math.ceil(len(data) * data[0].itemsize / num_messages)
+
+# Divide the data into chunks of the calculated message size
+chunks = [data[i:i + message_size] for i in range(0, len(data), message_size)]
+
+# Send the chunks of data as messages through SQS
+for chunk in chunks:
+    send_message(chunk)
