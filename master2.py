@@ -15,10 +15,10 @@ def main():
 
     print('acting as a master')
 
-    partition = 100
+    partition = 10
     axis = 0
-    m = 1000
-    n = 1000
+    m = 10
+    n = 10
     randF = 0
     randT = 10
 
@@ -72,13 +72,14 @@ def main():
         message = sqs_function2.receive_message()
         if message is not None:
             for one_result in message:
+                print(one_result)
                 index = one_result[0][0]
                 sub_index = one_result[1][0]
                 ikey = f'{index}-{sub_index}'
                 if ikey in dict_of_matrixs:
                     status_combine = mp.combine_addition(one_result)
                     del dict_of_matrixs[ikey]
-                    count_get+=1
+            count_get+=1
             no_msg_time = time.time()
         if time.time()-no_msg_time > 15:
             print(f'no message for 15s, try to check the black result')            
@@ -86,6 +87,7 @@ def main():
             for key, value in dict_of_matrixs.items():
                 if value is not None:
                     one_pack_of_matrixs = value
+                    print(one_pack_of_matrixs)
                     message_id = sqs_function1.send_message(message = [one_pack_of_matrixs])
                     count_resend+=1
             if count_resend > 0:
