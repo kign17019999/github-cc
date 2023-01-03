@@ -69,7 +69,7 @@ def main():
         message_id = sqs_function1.send_message(message = set_pack_of_matrixs)
         if time.time()-start_time > time_before_print_process:
             start_time = time.time()
-            print(f'trying to sending...{i}/{partition} ')
+            print(f'    trying to sending...{i}/{partition} ')
     
     stop_time_for_sending = time.time()
     print(f'finishing sending...{partition}/{partition} ')
@@ -109,8 +109,8 @@ def main():
                 count_resend+=1
                 if time.time()-start_time_resend > time_before_print_process:
                     start_time = time.time()
-                    print(f'    trying to resending...{count_resend}/{count_num_for_resend} ')
-                print(f'    trying to resending...{count_resend}/{count_num_for_resend} ')
+                    print(f'        trying to resending...{count_resend}/{count_num_for_resend} ')
+                print(f'        trying to resending...{count_resend}/{count_num_for_resend} ')
             if count_resend > 0:
                 no_msg_time = time.time()
             else:
@@ -118,7 +118,7 @@ def main():
 
         if time.time()-start_time > time_before_print_process:
             start_time = time.time()
-            print(f'trying to get results...{count_get}/{partition} ')
+            print(f'    trying to get results...{count_get}/{partition} ')
 
         if count_get == partition:
             break
@@ -133,17 +133,17 @@ def main():
     result_with_local = mat1+mat2
     stop_time_local = time.time()
     
-    
-    print(f'checking result: \n{final_result == result_with_local}')
+    print('checking result:')
+    print(f'    {final_result == result_with_local}')
     
     print('timing...')
 
     print('-----------------------------------------------')
-    print(f'>> total time sending message : {stop_time_for_sending-start_time_for_sending}s')
-    print(f'>> total time getting result  : {stop_time_getting_result-start_time_getting_result}s (include resending time)')
+    print(f'>> total time sending message : {stop_time_for_sending-start_time_for_sending} s')
+    print(f'>> total time getting result  : {stop_time_getting_result-start_time_getting_result} s (include resending time)')
     print('-----------------------------------------------')
-    print(f'>> total time distibuted system    : {stop_time_all-start_time_all}s')
-    print(f'>> total time local system         : {stop_time_local-start_time_local}s')
+    print(f'>> total time distibuted system    : {stop_time_all-start_time_all} s')
+    print(f'>> total time local system         : {stop_time_local-start_time_local} s')
     
 
 if __name__ == '__main__':

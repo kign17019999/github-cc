@@ -28,7 +28,7 @@ def main():
                 results.append(one_result)
             message_id = sqs_function2.send_message(message=results)
             count+=1
-            print(f'{count}: sending to Master with message_id: {message_id}')
+            print(f'    {count}: done process & sending result to Master with message_id: {message_id}')
 
 
 if __name__ == '__main__':
