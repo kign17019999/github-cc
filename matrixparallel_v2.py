@@ -145,6 +145,7 @@ class MatrixParallel:
                     sub_of_sub_matrixs1 = np.array_split(sub_matrixs1[i], min_in_each_parition, axis = 1)
                     sub_of_sub_matrixs2 = np.array_split(sub_matrixs2[j], min_in_each_parition, axis = 0)   
                     len_sub_of_sub = min_in_each_parition    
+                start_time = time.time()
                 for sub_index in range(len_sub_of_sub):
                     a = sub_of_sub_matrixs1[sub_index].tolist()
                     b = sub_of_sub_matrixs2[sub_index].tolist()
@@ -152,6 +153,9 @@ class MatrixParallel:
                     pack_of_matrixs.append(one_pack_of_matrixs)
                     dict_of_matrixs.update({f'{index}-{sub_index}':one_pack_of_matrixs})
                     self.decomp_count_mul +=1
+                    if time.time()-start_time > 5:
+                        start_time = time.time()
+                        print(f'    trying to decompose into {self.decomp_count_add}/{len_sub_of_sub} parition')                    
                 index+=1
 
         return pack_of_matrixs, dict_of_matrixs
