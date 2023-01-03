@@ -118,7 +118,7 @@ def master_multiplication(queue_url1, region_name1, queue_url2, region_name2, pa
     stop_time_all = time.time()
 
     start_time_local = time.time()
-    result_with_local = mat1+mat2
+    result_with_local = np.dot(mat1, mat2)
     stop_time_local = time.time()
     
     print('checking result:')
