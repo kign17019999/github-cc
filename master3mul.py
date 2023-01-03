@@ -29,10 +29,24 @@ def master_multiplication(queue_url1, region_name1, queue_url2, region_name2, pa
     mp = MatrixParallel()
     mat1 = mp.gen_matrix(m1,n1,randF,randT)
     mat2 = mp.gen_matrix(m2,n2,randF,randT)
-    pack_of_matrixs, dict_of_matrixs = mp.decompose_for_multiplication(mat1, mat2, partition)
     
     # count all time process
     start_time_all = time.time()
+
+
+    print('start decompose metrix..')
+
+    # count decomposing time process
+    start_time_for_decompose= time.time()
+
+    # initial some parameter for following process
+    start_time = time.time()
+    pack_of_matrixs, dict_of_matrixs = mp.decompose_for_multiplication(mat1, mat2, partition)
+    if time.time()-start_time > time_before_print_process:
+        start_time = time.time()
+        print(f'    trying to decompose into {mp.decomp_count_mul}/{partition} parition')
+    
+    stop_time_for_decompose= time.time()
     
     print('start sending..')
 
@@ -127,6 +141,7 @@ def master_multiplication(queue_url1, region_name1, queue_url2, region_name2, pa
     print('timing...')
 
     print('-----------------------------------------------')
+    print(f'>> total time decompose       : {stop_time_for_decompose-start_time_for_decompose} s')
     print(f'>> total time sending message : {stop_time_for_sending-start_time_for_sending} s')
     print(f'>> total time getting result  : {stop_time_getting_result-start_time_getting_result} s (include resending time)')
     print('-----------------------------------------------')

@@ -10,6 +10,9 @@ class MatrixParallel:
     def __init__(self):
         self.result_addition = np.empty(0)
         self.result_multiplication = np.empty(0)
+
+        self.decomp_count_add = 0
+        self.decomp_count_mul = 0
         
     
     def gen_matrix(self, rowSize, columnSize, randFrom, randTo):
@@ -20,6 +23,8 @@ class MatrixParallel:
         return matrix
     
     def decompose_for_addition(self, matrix1, matrix2, partition):
+
+        self.decomp_count_add = 0
 
         sub_matrixs1 = np.vsplit(matrix1, matrix1.shape[0])
         sub_matrixs2 = np.vsplit(matrix2, matrix2.shape[0])
@@ -60,6 +65,7 @@ class MatrixParallel:
                 pack_of_matrixs.append(one_pack_of_matrixs)
                 dict_of_matrixs.update({f'{index_row}-{index_col}':one_pack_of_matrixs})
                 index_col += np.array(a).shape[1]
+                self.decomp_count_add +=1
 
         return pack_of_matrixs, dict_of_matrixs
 
@@ -99,6 +105,9 @@ class MatrixParallel:
 
 
     def decompose_for_multiplication(self, matrix1, matrix2, partition):
+
+        self.decomp_count_mul = 0
+
         sub_matrixs1 = np.vsplit(matrix1, matrix1.shape[0])
         sub_matrixs2 = np.hsplit(matrix2, matrix2.shape[1])
         
@@ -133,11 +142,12 @@ class MatrixParallel:
                     sub_of_sub_matrixs2 = np.array_split(sub_matrixs2[j], min_in_each_parition, axis = 0)   
                     len_sub_of_sub = min_in_each_parition    
                 for sub_index in range(len_sub_of_sub):
-                  a = sub_of_sub_matrixs1[sub_index].tolist()
-                  b = sub_of_sub_matrixs2[sub_index].tolist()
-                  one_pack_of_matrixs = [[index], [sub_index], a, b]
-                  pack_of_matrixs.append(one_pack_of_matrixs)
-                  dict_of_matrixs.update({f'{index}-{sub_index}':one_pack_of_matrixs})
+                    a = sub_of_sub_matrixs1[sub_index].tolist()
+                    b = sub_of_sub_matrixs2[sub_index].tolist()
+                    one_pack_of_matrixs = [[index], [sub_index], a, b]
+                    pack_of_matrixs.append(one_pack_of_matrixs)
+                    dict_of_matrixs.update({f'{index}-{sub_index}':one_pack_of_matrixs})
+                    self.decomp_count_mul +=1
                 index+=1
 
         return pack_of_matrixs, dict_of_matrixs
