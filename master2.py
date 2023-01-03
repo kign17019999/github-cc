@@ -16,11 +16,14 @@ def main():
     print('acting as a master')
 
     partition = 10
-    axis = 0
     m = 10
     n = 10
     randF = 0
     randT = 10
+
+    # time in Second
+    time_before_print_process = 5
+    time_before_resend = 15
 
     #check partitoin and num_row_of_metrix
     if m >= partition:
@@ -40,10 +43,17 @@ def main():
     mat2 = mp.gen_matrix(m,n,randF,randT)
     pack_of_matrixs, dict_of_matrixs = mp.decompose_for_addition(mat1, mat2, partition)
     
-    start_time0 = time.time()
+    # count all time process
+    start_time_all = time.time()
     
-    start_time = time.time()
     print('start sending..')
+
+    # count sending time process
+    start_time_for_sending = time.time()
+    
+
+    # initial some parameter for following process
+    start_time = time.time()
     num_in_pack_of_matrixs = 0
     for i in range(partition):
         set_pack_of_matrixs = []
@@ -57,14 +67,20 @@ def main():
             set_pack_of_matrixs.append(one_pack_of_matrixs)
             num_in_pack_of_matrixs+=1
         message_id = sqs_function1.send_message(message = set_pack_of_matrixs)
-        if time.time()-start_time > 15:
+        if time.time()-start_time > time_before_print_process:
             start_time = time.time()
             print(f'trying to sending...{i}/{partition} ')
     
+    stop_time_for_sending = time.time()
     print(f'finishing sending...{partition}/{partition} ')
     
-    start_time_getting_result = time.time()
+    
     print('start getting result & combine...')
+
+    # count sending time process
+    start_time_getting_result = time.time()
+
+    # initial some parameter for following process
     start_time = time.time()
     no_msg_time = time.time()
     count_get = 0
@@ -81,43 +97,53 @@ def main():
                     del dict_of_matrixs[ikey]
             count_get+=1
             no_msg_time = time.time()
-        if time.time()-no_msg_time > 15:
-            print(f'no message for 15s, try to check the black result')            
+        if time.time()-no_msg_time > time_before_resend:
+            print(f'no message for {time_before_resend}s, try to check the black result')
+            start_time_resend = time.time()            
             count_resend = 0
+            count_num_for_resend = len(dict_of_matrixs)
             for key, value in dict_of_matrixs.items():
-                if value is not None:
-                    one_pack_of_matrixs = value
-                    print(one_pack_of_matrixs)
-                    message_id = sqs_function1.send_message(message = [one_pack_of_matrixs])
-                    count_resend+=1
+                one_pack_of_matrixs = value
+                #print(one_pack_of_matrixs)
+                message_id = sqs_function1.send_message(message = [one_pack_of_matrixs])
+                count_resend+=1
+                if time.time()-start_time_resend > time_before_print_process:
+                    start_time = time.time()
+                    print(f'    trying to resending...{count_resend}/{count_num_for_resend} ')
+                print(f'    trying to resending...{count_resend}/{count_num_for_resend} ')
             if count_resend > 0:
                 no_msg_time = time.time()
             else:
                 break
 
-        if time.time()-start_time > 5:
+        if time.time()-start_time > time_before_print_process:
             start_time = time.time()
             print(f'trying to get results...{count_get}/{partition} ')
 
         if count_get == partition:
             break
     
-    print(f'finish getting all result & combine...{count_get}/{partition}')
-    print(f'time getting all result: {time.time()-start_time_getting_result}')       
+    stop_time_getting_result = time.time()
+    print(f'finish getting all result & combine...{count_get}/{partition}') 
     
     final_result = mp.get_result_addition()
+    stop_time_all = time.time()
 
-    totle_dist_time = time.time()-start_time0
-    
-    start_time1 = time.time()
+    start_time_local = time.time()
     result_with_local = mat1+mat2
-    totle_local_time = time.time()-start_time1
+    stop_time_local = time.time()
     
     
-    print(final_result == result_with_local)
+    print(f'checking result: \n{final_result == result_with_local}')
     
-    print(f'total time dist : {totle_dist_time}')
-    print(f'total time local: {totle_local_time}')
+    print('timing...')
+
+    print('-----------------------------------------------')
+    print(f'>> total time sending message : {stop_time_for_sending-start_time_for_sending}s')
+    print(f'>> total time getting result  : {stop_time_getting_result-start_time_getting_result}s (include resending time)')
+    print('-----------------------------------------------')
+    print(f'>> total time distibuted system    : {stop_time_all-start_time_all}s')
+    print(f'>> total time local system         : {stop_time_local-start_time_local}s')
     
 
 if __name__ == '__main__':
