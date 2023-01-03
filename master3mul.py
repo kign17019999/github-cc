@@ -29,7 +29,7 @@ def master_multiplication(queue_url1, region_name1, queue_url2, region_name2, pa
     mp = MatrixParallel()
     mat1 = mp.gen_matrix(m1,n1,randF,randT)
     mat2 = mp.gen_matrix(m2,n2,randF,randT)
-    pack_of_matrixs, dict_of_matrixs = mp.decompose_for_addition(mat1, mat2, partition)
+    pack_of_matrixs, dict_of_matrixs = mp.decompose_for_multiplication(mat1, mat2, partition)
     
     # count all time process
     start_time_all = time.time()
@@ -81,7 +81,7 @@ def master_multiplication(queue_url1, region_name1, queue_url2, region_name2, pa
                 sub_index = one_result[1][0]
                 ikey = f'{index}-{sub_index}'
                 if ikey in dict_of_matrixs:
-                    status_combine = mp.combine_addition(one_result)
+                    status_combine = mp.combine_multiplication(one_result)
                     del dict_of_matrixs[ikey]
             count_get+=1
             no_msg_time = time.time()
@@ -114,7 +114,7 @@ def master_multiplication(queue_url1, region_name1, queue_url2, region_name2, pa
     stop_time_getting_result = time.time()
     print(f'finish getting all result & combine...{count_get}/{partition}') 
     
-    final_result = mp.get_result_addition()
+    final_result = mp.get_result_multiplication()
     stop_time_all = time.time()
 
     start_time_local = time.time()
