@@ -33,6 +33,8 @@ def master_addition(queue_url1, region_name1, queue_url2, region_name2, partitio
 
     print('start decompose metrix..')
 
+    # count decomposing time process
+    start_time_for_decompose= time.time()
 
     # initial some parameter for following process
     start_time = time.time()
