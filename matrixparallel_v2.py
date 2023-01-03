@@ -113,10 +113,13 @@ class MatrixParallel:
 
         if result_row*result_col < partition:
             min_in_each_parition  = partition//(result_row*result_col)
+            num_max_in_each_parition = partition%(result_row*result_col)
+
         else:
             min_in_each_parition = 1
+            num_max_in_each_parition = 0
+        
         max_in_each_parition  = min_in_each_parition+1
-        num_max_in_each_parition = partition%(result_row*result_col)
         
         for i in range(result_row):
             for j in range(result_col):
@@ -134,12 +137,13 @@ class MatrixParallel:
                   b = sub_of_sub_matrixs2[sub_index].tolist()
                   one_pack_of_matrixs = [[index], [sub_index], a, b]
                   pack_of_matrixs.append(one_pack_of_matrixs)
-                  dict_of_matrixs.update({f'{index}-{sub_index}':None})
+                  dict_of_matrixs.update({f'{index}-{sub_index}':one_pack_of_matrixs})
                 index+=1
 
         return pack_of_matrixs, dict_of_matrixs
     
     def multiplication(self, one_pack_of_matrixs):
+
         index = one_pack_of_matrixs[0]
         sub_index = one_pack_of_matrixs[1]
         a = np.array(one_pack_of_matrixs[2])
@@ -153,12 +157,16 @@ class MatrixParallel:
         return result_one_pack_of_matrixs
     
     def combine_multiplication(self, result_one_pack_of_matrixs):
-        index = result_one_pack_of_matrixs[0]
-        index_row = index[0]//self.result_multiplication.shape[1]
-        index_col = index[0]%self.result_multiplication.shape[1]
-        self.result_multiplication[index_row][index_col] +=result_one_pack_of_matrixs[2][0]
-        
-        return 'this combine is done'
+        comb_state = False
+        try:
+            index = result_one_pack_of_matrixs[0]
+            index_row = index[0]//self.result_multiplication.shape[1]
+            index_col = index[0]%self.result_multiplication.shape[1]
+            self.result_multiplication[index_row][index_col] +=result_one_pack_of_matrixs[2][0]
+            comb_state = True
+        except:
+            pass  
+        return comb_state
 
     def get_result_multiplication(self):
         return self.result_multiplication

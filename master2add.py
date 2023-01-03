@@ -15,13 +15,14 @@ def main():
 
     print('acting as a master')
 
+    # config metrix
     partition = 10
     m = 10
     n = 10
     randF = 0
     randT = 10
 
-    # time in Second
+    # config log time in Second
     time_before_print_process = 5
     time_before_resend = 15
 
@@ -134,7 +135,7 @@ def main():
     stop_time_local = time.time()
     
     print('checking result:')
-    print(f'    {final_result == result_with_local}')
+    print(f'{final_result == result_with_local}')
     
     print('timing...')
 
