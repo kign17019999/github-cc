@@ -3,7 +3,10 @@ import numpy as np
 
 
 def delete_msg(queue_url, region_name):
-    print('trying ...')
+    
+    queue_name = queue_url.rsplit('/', 1)[-1]
+
+    print(f'trying delete msg in "{queue_name}"...')
 
     sqs_function = SQSFunction(queue_url, region_name)
 

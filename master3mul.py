@@ -8,7 +8,7 @@ def master_multiplication(queue_url1, region_name1, queue_url2, region_name2, pa
     sqs_function1 = SQSFunction(queue_url1, region_name1)
     sqs_function2 = SQSFunction(queue_url2, region_name2)
 
-    print('acting as a master')
+    print('acting as a master multiplication')
 
     result_row = m1
     result_col = n2
