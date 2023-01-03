@@ -34,10 +34,13 @@ class MatrixParallel:
 
         if result_row < partition:
             min_in_each_parition  = partition//result_row
+            num_max_in_each_parition = partition%result_row
         else:
             min_in_each_parition = 1
+            num_max_in_each_parition = 0
+        
         max_in_each_parition  = min_in_each_parition+1
-        num_max_in_each_parition = partition%result_row
+        
 
         for index_row in range(result_row):
             if num_max_in_each_parition != 0:
@@ -55,7 +58,7 @@ class MatrixParallel:
                 b = sub_of_sub_matrixs2[sub_index].tolist()
                 one_pack_of_matrixs = [[index_row], [index_col], a, b]
                 pack_of_matrixs.append(one_pack_of_matrixs)
-                dict_of_matrixs.update({f'{index_row}-{index_col}':[a,b]})
+                dict_of_matrixs.update({f'{index_row}-{index_col}':one_pack_of_matrixs})
                 index_col += np.array(a).shape[1]
 
         return pack_of_matrixs, dict_of_matrixs
@@ -76,15 +79,19 @@ class MatrixParallel:
         return result_one_pack_of_matrixs
 
     def combine_addition(self, result_one_pack_of_matrixs):
-        index_row = result_one_pack_of_matrixs[0][0]
-        index_col = result_one_pack_of_matrixs[1][0]
-        result_sub_matrix = np.array(result_one_pack_of_matrixs[2])
-        
-        num_rows_sub, num_cols_sub = result_sub_matrix.shape
+        comb_state = False
+        try:
+            index_row = result_one_pack_of_matrixs[0][0]
+            index_col = result_one_pack_of_matrixs[1][0]
+            result_sub_matrix = np.array(result_one_pack_of_matrixs[2])
+            
+            num_rows_sub, num_cols_sub = result_sub_matrix.shape
 
-        self.result_addition[index_row:index_row + num_rows_sub, index_col:index_col + num_cols_sub] = result_sub_matrix
-        
-        return 'this combine is done'
+            self.result_addition[index_row:index_row + num_rows_sub, index_col:index_col + num_cols_sub] = result_sub_matrix
+            comb_state = True
+        except:
+            pass
+        return comb_state
 
 
     def get_result_addition(self):

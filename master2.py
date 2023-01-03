@@ -23,13 +23,13 @@ def main():
     randT = 10
 
     #check partitoin and num_row_of_metrix
-    if m > partition:
+    if m >= partition:
         #this mean sub_metrix from CLASS will be more than num_given parition
         min_msg_each_send = m//partition
         max_msg_each_send = min_msg_each_send+1
-        num_send_with_max = m/partition
+        num_send_with_max = m%partition
     else:
-        min_msg_each_send = partition
+        min_msg_each_send = 1
         max_msg_each_send = min_msg_each_send
         num_send_with_max = 0
 
@@ -64,7 +64,7 @@ def main():
     print(f'finishing sending...{partition}/{partition} ')
     
     start_time_getting_result = time.time()
-    print('start getting result...')
+    print('start getting result & combine...')
     start_time = time.time()
     no_msg_time = time.time()
     count_get = 0
@@ -72,7 +72,7 @@ def main():
         message = sqs_function2.receive_message()
         if message is not None:
             for one_result in message:
-                print(one_result)
+                #print(one_result)
                 index = one_result[0][0]
                 sub_index = one_result[1][0]
                 ikey = f'{index}-{sub_index}'
@@ -98,7 +98,11 @@ def main():
         if time.time()-start_time > 5:
             start_time = time.time()
             print(f'trying to get results...{count_get}/{partition} ')
+
+        if count_get == partition:
+            break
     
+    print(f'finish getting all result & combine...{count_get}/{partition}')
     print(f'time getting all result: {time.time()-start_time_getting_result}')       
     
     final_result = mp.get_result_addition()
