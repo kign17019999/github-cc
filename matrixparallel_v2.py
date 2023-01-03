@@ -66,6 +66,9 @@ class MatrixParallel:
                 dict_of_matrixs.update({f'{index_row}-{index_col}':one_pack_of_matrixs})
                 index_col += np.array(a).shape[1]
                 self.decomp_count_add +=1
+                if time.time()-start_time > time_before_print_process:
+                    start_time = time.time()
+                    print(f'    trying to decompose into {self.decomp_count_add}/{len_sub_of_sub} parition')
 
         return pack_of_matrixs, dict_of_matrixs
 

@@ -36,15 +36,9 @@ def master_multiplication(queue_url1, region_name1, queue_url2, region_name2, pa
 
     print('start decompose metrix..')
 
-    # count decomposing time process
-    start_time_for_decompose= time.time()
-
     # initial some parameter for following process
     start_time = time.time()
     pack_of_matrixs, dict_of_matrixs = mp.decompose_for_multiplication(mat1, mat2, partition)
-    if time.time()-start_time > time_before_print_process:
-        start_time = time.time()
-        print(f'    trying to decompose into {mp.decomp_count_mul}/{partition} parition')
     print(f'finishing decompose into {mp.decomp_count_mul}/{partition} parition')
     stop_time_for_decompose= time.time()
     
