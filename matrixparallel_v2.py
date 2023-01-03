@@ -46,7 +46,7 @@ class MatrixParallel:
         
         max_in_each_parition  = min_in_each_parition+1
         
-
+        start_time = time.time()
         for index_row in range(result_row):
             if num_max_in_each_parition != 0:
                 sub_of_sub_matrixs1 = np.array_split(sub_matrixs1[index_row], max_in_each_parition, axis = 1)
@@ -58,7 +58,6 @@ class MatrixParallel:
                 sub_of_sub_matrixs2 = np.array_split(sub_matrixs2[index_row], min_in_each_parition, axis = 1)   
                 len_sub_of_sub = min_in_each_parition
             index_col = 0 #shape[1] of previous is a starting next element index
-            start_time = time.time()
             for sub_index in range(len_sub_of_sub):
                 a = sub_of_sub_matrixs1[sub_index].tolist()
                 b = sub_of_sub_matrixs2[sub_index].tolist()
@@ -134,6 +133,7 @@ class MatrixParallel:
         
         max_in_each_parition  = min_in_each_parition+1
         
+        start_time = time.time()
         for i in range(result_row):
             for j in range(result_col):
                 if num_max_in_each_parition != 0:
@@ -145,7 +145,6 @@ class MatrixParallel:
                     sub_of_sub_matrixs1 = np.array_split(sub_matrixs1[i], min_in_each_parition, axis = 1)
                     sub_of_sub_matrixs2 = np.array_split(sub_matrixs2[j], min_in_each_parition, axis = 0)   
                     len_sub_of_sub = min_in_each_parition    
-                start_time = time.time()
                 for sub_index in range(len_sub_of_sub):
                     a = sub_of_sub_matrixs1[sub_index].tolist()
                     b = sub_of_sub_matrixs2[sub_index].tolist()
@@ -155,7 +154,7 @@ class MatrixParallel:
                     self.decomp_count_mul +=1
                     if time.time()-start_time > 5:
                         start_time = time.time()
-                        print(f'    trying to decompose into {self.decomp_count_add}/{len_sub_of_sub} parition')                    
+                        print(f'    trying to decompose into {self.decomp_count_mul}/{len_sub_of_sub} parition')                    
                 index+=1
 
         return pack_of_matrixs, dict_of_matrixs
