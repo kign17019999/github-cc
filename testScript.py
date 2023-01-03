@@ -17,15 +17,15 @@ m2 = 100
 n2 = 100
 
 #config mode
-wantAdd = True
-wantMul = False
+wantAdd = False
+wantMul = True
 
 #******************************************************************************
 
 url1 = 'https://sqs.us-east-1.amazonaws.com/183243280383/queue_to_worker'
-reg1 = 'us-east-1', 
+reg1 = 'us-east-1'
 url2 = 'https://sqs.us-east-1.amazonaws.com/183243280383/queue_to_master'
-reg2 = 'us-east-1', 
+reg2 = 'us-east-1'
 
 randFr = 0
 reanTo = 100
