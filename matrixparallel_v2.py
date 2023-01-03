@@ -58,6 +58,7 @@ class MatrixParallel:
                 sub_of_sub_matrixs2 = np.array_split(sub_matrixs2[index_row], min_in_each_parition, axis = 1)   
                 len_sub_of_sub = min_in_each_parition
             index_col = 0 #shape[1] of previous is a starting next element index
+            start_time = time.time()
             for sub_index in range(len_sub_of_sub):
                 a = sub_of_sub_matrixs1[sub_index].tolist()
                 b = sub_of_sub_matrixs2[sub_index].tolist()
