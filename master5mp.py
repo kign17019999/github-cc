@@ -309,7 +309,6 @@ def get_results(method, mp, dict_of_matrixs, time_before_resend, time_before_pri
     return final_result, time_for_getting_result
 
 if __name__ == '__main__':
-    
     master(
         method = 'addidtion',
         queue_url1 = 'https://sqs.us-east-1.amazonaws.com/183243280383/queue_to_worker', 
@@ -319,8 +318,8 @@ if __name__ == '__main__':
         partition = 10, 
         m1 = 10, 
         n1 = 10, 
-        m1 = 10, 
-        n1 = 10, 
+        m2 = 10, 
+        n2 = 10, 
         randF=0, randT=10, 
         time_before_print_process=5, time_before_resend=15,
         parallel = False

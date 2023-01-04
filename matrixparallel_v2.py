@@ -107,7 +107,7 @@ class MatrixParallel:
         return self.result_addition
 
 
-    def decompose_for_multiplication(self, matrix1, matrix2, partition):
+    def decompose_for_multiplication(self, matrix1, matrix2, partition, time_before_print_process):
 
         self.decomp_count_mul = 0
 
@@ -152,7 +152,7 @@ class MatrixParallel:
                     pack_of_matrixs.append(one_pack_of_matrixs)
                     dict_of_matrixs.update({f'{index}-{sub_index}':one_pack_of_matrixs})
                     self.decomp_count_mul +=1
-                    if time.time()-start_time > 5:
+                    if time.time()-start_time > time_before_print_process:
                         start_time = time.time()
                         print(f'    trying to decompose into {self.decomp_count_mul}/{result_row*result_col} parts')                    
                 index+=1

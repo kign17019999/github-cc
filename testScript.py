@@ -26,8 +26,8 @@ m5.master(
     partition = partition, 
     m1 = m1, 
     n1 = n1, 
-    m1 = m2, 
-    n1 = n2, 
+    m2 = m2, 
+    n2 = n2, 
     randF=0, randT=10, 
     time_before_print_process=5, time_before_resend=15,
     parallel = parallel
