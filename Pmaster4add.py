@@ -23,7 +23,7 @@ def master_addition(queue_url1, region_name1, queue_url2, region_name2, partitio
 
 
     print('start decompose metrix..')
-    pack_of_matrixs, dict_of_matrixs, start_time_for_decompose, stop_time_for_decompose = pack_of_matrixs = decompose(mp=mp, mat1=mat1, mat2=mat2, partition=partition)
+    pack_of_matrixs, dict_of_matrixs, start_time_for_decompose, stop_time_for_decompose = decompose(mp=mp, mat1=mat1, mat2=mat2, partition=partition)
 
 
     

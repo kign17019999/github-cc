@@ -1,14 +1,14 @@
 import boto3
 
 # Create an SSM client
-ssm = boto3.client('ssm', region_name = 'us-east-1')
+ssm = boto3.client('i-089b73b2d2e0c3d6e', region_name = 'us-east-1')
 
 # Execute the command on the instance
 response = ssm.send_command(
     InstanceIds=['i-0ac22b2b991c3b7bb'],
     DocumentName='AWS-RunShellScript',
     Comment='Run a script',
-    Parameters={'commands': ['cd github-cc-worker3', 'python worker3mul.py']}
+    Parameters={'commands': ['cd github-cc', 'nohup python worker3mul.py &']}
 )
 
 # Get the command ID
