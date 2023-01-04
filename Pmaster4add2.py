@@ -32,7 +32,7 @@ def master_addition(queue_url1, region_name1, queue_url2, region_name2, partitio
 
     print('start getting result & combine...')
     #final_result, start_time_getting_result, stop_time_getting_result = get_results(mp=mp, sqs_function1=sqs_function1, sqs_function2=sqs_function2, dict_of_matrixs=dict_of_matrixs, time_before_resend=time_before_resend, time_before_print_process=time_before_print_process, partition=partition)
-    temp_get = pool.apply_async(get_results,(mp, sqs_function1, sqs_function2, dict_of_matrixs, time_before_resend, time_before_print_process, partition))
+    temp_get = pool.apply_async(get_results,(mp, dict_of_matrixs, time_before_resend, time_before_print_process, partition, queue_url1, region_name1, queue_url2, region_name2))
   
     pool.close()
     pool.join()
@@ -115,7 +115,11 @@ def send_msg(m, partition, time_before_print_process, pack_of_matrixs, queue_url
 
     return start_time_for_sending, stop_time_for_sending
 
-def get_results(mp, sqs_function1, sqs_function2, dict_of_matrixs, time_before_resend, time_before_print_process, partition):
+def get_results(mp, dict_of_matrixs, time_before_resend, time_before_print_process, partition, queue_url1, region_name1, queue_url2, region_name2):
+    
+    sqs_function1 = SQSFunction(queue_url1, region_name1)
+    sqs_function2 = SQSFunction(queue_url2, region_name2)
+    
     # count sending time process
     start_time_getting_result = time.time()
 
