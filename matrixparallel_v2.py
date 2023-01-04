@@ -22,7 +22,7 @@ class MatrixParallel:
         
         return matrix
     
-    def decompose_for_addition(self, matrix1, matrix2, partition):
+    def decompose_for_addition(self, matrix1, matrix2, partition, time_before_print_process):
 
         self.decomp_count_add = 0
 
@@ -66,7 +66,7 @@ class MatrixParallel:
                 dict_of_matrixs.update({f'{index_row}-{index_col}':one_pack_of_matrixs})
                 index_col += np.array(a).shape[1]
                 self.decomp_count_add +=1
-                if time.time()-start_time > 5:
+                if time.time()-start_time > time_before_print_process:
                     start_time = time.time()
                     print(f'    trying to decompose into {self.decomp_count_add}/{result_row} parts')
 
