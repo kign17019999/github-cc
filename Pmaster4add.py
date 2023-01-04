@@ -3,6 +3,7 @@ from matrixparallel_v2 import MatrixParallel
 import numpy as np
 import time
 
+
 def master_addition(queue_url1, region_name1, queue_url2, region_name2, partition, m, n, randF=0, randT=10, time_before_print_process=5, time_before_resend=15):
     
     sqs_function1 = SQSFunction(queue_url1, region_name1)
