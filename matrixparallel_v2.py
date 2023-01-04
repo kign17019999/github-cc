@@ -68,7 +68,7 @@ class MatrixParallel:
                 self.decomp_count_add +=1
                 if time.time()-start_time > 5:
                     start_time = time.time()
-                    print(f'    trying to decompose into {self.decomp_count_add}/{len_sub_of_sub} parition')
+                    print(f'    trying to decompose into {self.decomp_count_add}/{result_row} parts')
 
         return pack_of_matrixs, dict_of_matrixs
 
@@ -154,7 +154,7 @@ class MatrixParallel:
                     self.decomp_count_mul +=1
                     if time.time()-start_time > 5:
                         start_time = time.time()
-                        print(f'    trying to decompose into {self.decomp_count_mul}/{len_sub_of_sub} parition')                    
+                        print(f'    trying to decompose into {self.decomp_count_mul}/{result_row*result_col} parts')                    
                 index+=1
 
         return pack_of_matrixs, dict_of_matrixs
