@@ -5,7 +5,7 @@ ssm = boto3.client('i-089b73b2d2e0c3d6e', region_name = 'us-east-1')
 
 # Execute the command on the instance
 response = ssm.send_command(
-    InstanceIds=['i-0ac22b2b991c3b7bb'],
+    InstanceIds=['i-089b73b2d2e0c3d6e'],
     DocumentName='AWS-RunShellScript',
     Comment='Run a script',
     Parameters={'commands': ['cd github-cc', 'nohup python worker3mul.py &']}
@@ -22,5 +22,5 @@ while not command_completed:
     command_completed = command_status['Status'] == 'Success'
 
 # Get the command output
-command_output = ssm.get_command_invocation(CommandId=command_id, InstanceId='i-05dca578b8ee59c9c')
+command_output = ssm.get_command_invocation(CommandId=command_id, InstanceId='i-089b73b2d2e0c3d6e')
 print(command_output['StandardOutputContent'])
