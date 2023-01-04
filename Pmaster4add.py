@@ -23,17 +23,17 @@ def master_addition(queue_url1, region_name1, queue_url2, region_name2, partitio
 
 
     print('start decompose metrix..')
-    pack_of_matrixs, dict_of_matrixs, start_time_for_decompose, stop_time_for_decompose = pack_of_matrixs = decompose(mp, mat1, mat2, partition, )
+    pack_of_matrixs, dict_of_matrixs, start_time_for_decompose, stop_time_for_decompose = pack_of_matrixs = decompose(mp=mp, mat1=mat1, mat2=mat2, partition=partition)
 
 
     
     print('start sending..')
-    start_time_for_sending, stop_time_for_sending = send_msg(sqs_function1, m, partition, time_before_print_process, pack_of_matrixs)
+    start_time_for_sending, stop_time_for_sending = send_msg(sqs_function1=sqs_function1, m=m, partition=partition, time_before_print_process=time_before_print_process, pack_of_matrixs=pack_of_matrixs)
 
     
     
     print('start getting result & combine...')
-    final_result, start_time_getting_result, stop_time_getting_result = get_results(mp, sqs_function1, sqs_function2, dict_of_matrixs, time_before_resend, time_before_print_process, partition)
+    final_result, start_time_getting_result, stop_time_getting_result = get_results(mp=mp, sqs_function1=sqs_function1, sqs_function2=sqs_function2, dict_of_matrixs=dict_of_matrixs, time_before_resend=time_before_resend, time_before_print_process=time_before_print_process, partition=partition)
 
     
     stop_time_all = time.time()
@@ -56,7 +56,7 @@ def master_addition(queue_url1, region_name1, queue_url2, region_name2, partitio
     print(f'>> total time local system         : {stop_time_local-start_time_local} s')
     
 
-def decompose(mp, mat1, mat2, partition, ):
+def decompose(mp, mat1, mat2, partition):
     # count decomposing time process
     start_time_for_decompose= time.time()
 
