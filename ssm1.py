@@ -8,7 +8,7 @@ response = ssm.send_command(
     InstanceIds=['i-089b73b2d2e0c3d6e'],
     DocumentName='AWS-RunShellScript',
     Comment='Run a script',
-    Parameters={'commands': ['cd github-cc', 'nohup python worker3mul.py &']}
+    Parameters={'commands': ['cd github-cc', 'nohup python3 worker3mul.py &']}
 )
 
 # Get the command ID
