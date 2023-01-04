@@ -27,13 +27,13 @@ def master_addition(queue_url1, region_name1, queue_url2, region_name2, partitio
     
     print('start sending..')
     #start_time_for_sending, stop_time_for_sending = send_msg(sqs_function1=sqs_function1, m=m, partition=partition, time_before_print_process=time_before_print_process, pack_of_matrixs=pack_of_matrixs)
-    temp_send = send_msg(sqs_function1=sqs_function1, m=m, partition=partition, time_before_print_process=time_before_print_process, pack_of_matrixs=pack_of_matrixs)
+    temp_send = pool.apply_async(send_msg, (sqs_function1, m, partition, time_before_print_process, pack_of_matrixs))
     
 
     print('start getting result & combine...')
     #final_result, start_time_getting_result, stop_time_getting_result = get_results(mp=mp, sqs_function1=sqs_function1, sqs_function2=sqs_function2, dict_of_matrixs=dict_of_matrixs, time_before_resend=time_before_resend, time_before_print_process=time_before_print_process, partition=partition)
-    temp_get = get_results(mp=mp, sqs_function1=sqs_function1, sqs_function2=sqs_function2, dict_of_matrixs=dict_of_matrixs, time_before_resend=time_before_resend, time_before_print_process=time_before_print_process, partition=partition)
-    
+    temp_get = pool.apply_async(get_results,(mp, sqs_function1, sqs_function2, dict_of_matrixs, time_before_resend, time_before_print_process, partition))
+  
     pool.close()
     pool.join()
 
