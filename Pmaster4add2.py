@@ -27,7 +27,7 @@ def master_addition(queue_url1, region_name1, queue_url2, region_name2, partitio
     
     print('start sending..')
     #start_time_for_sending, stop_time_for_sending = send_msg(sqs_function1=sqs_function1, m=m, partition=partition, time_before_print_process=time_before_print_process, pack_of_matrixs=pack_of_matrixs)
-    temp_send = pool.apply_async(send_msg, (sqs_function1, m, partition, time_before_print_process, pack_of_matrixs))
+    temp_send = pool.apply_async(send_msg, (m, partition, time_before_print_process, pack_of_matrixs, queue_url1, region_name1))
     
 
     print('start getting result & combine...')
@@ -73,7 +73,10 @@ def decompose(mp, mat1, mat2, partition):
 
     return pack_of_matrixs, dict_of_matrixs, start_time_for_decompose, stop_time_for_decompose
 
-def send_msg(sqs_function1, m, partition, time_before_print_process, pack_of_matrixs):
+def send_msg(m, partition, time_before_print_process, pack_of_matrixs, queue_url1, region_name1):
+    sqs_function1 = SQSFunction(queue_url1, region_name1)
+
+    
     #check partitoin and num_row_of_metrix
     if m >= partition:
         #this mean sub_metrix from CLASS will be more than num_given parition
