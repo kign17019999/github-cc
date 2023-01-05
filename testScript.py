@@ -29,7 +29,12 @@ def main():
     #******************************************************************************
     #exec(open("ssm_start_w3a.py").read())
 
-    b3f = Boto3Function()
+    b3f = Boto3Function(region_name1)
+
+    inst_dict = b3f.ec2_status()
+    
+    for key, value in inst_dict.items():
+        print(f'Instance name: {key}, Instance ID: {value[0]}, Running status: {value[1]}')
 
     id_list = ['i-0a583c0ad764b4926', 'i-055336f9cd0657c5c', 'i-08fa110b2324b11c5', 'i-0d4f2d3a0d1f239bb']
     fileName = 'worker5.py'
@@ -43,7 +48,7 @@ def main():
             git_foldName = git_foldName
             )
 
-
+    print('wait for 5 sec...')
     time.sleep(5)
 
     for id in id_list:
