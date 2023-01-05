@@ -85,7 +85,8 @@ class Boto3Function():
         return command_id
 
     def inst_updateGit(self, target_instance_id, git_url, git_foldName):
-        commands = [f'cd /home/ec2-user/{git_foldName} && git reset --hard HEAD && git pull {git_url}']
+        #commands = [f'cd /home/ec2-user/{git_foldName} && git reset --hard HEAD && git pull {git_url}']
+        commands = [f'cd /home/ec2-user/ && sudo rm -r github-cc', f'cd /home/ec2-user && git clone {git_url}']
         command_id = self.execute_ssm_command(target_instance_id=target_instance_id, commands=commands, comment='update git')
         
         return command_id

@@ -5,13 +5,13 @@ ssm_client = boto3.client('ssm', region_name = 'us-east-1')
 
 # Specify the ID of the target instance
 # 06
-target_instance_id = 'i-055336f9cd0657c5c'
+target_instance_id = 'i-011e5c83dd72ef526'
 
 # Specify the name of the SSM document to use
 document_name = 'AWS-RunShellScript'
 
 # Specify the script to run and the working directory
-commands = [f'cd /home/ec2-user && git clone https://github.com/kign17019999/github-cc.git']
+commands = ['cd /home/ec2-user/github-cc && git reset --hard HEAD && git pull https://github.com/kign17019999/github-cc.git']
 
 # Send the command to the target instance
 response = ssm_client.send_command(
