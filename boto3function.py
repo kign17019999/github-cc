@@ -105,7 +105,7 @@ class Boto3Function():
 
     def start_worker(self, target_instance_id, file_name, method, queue_url1, region_name1, queue_url2, region_name2, check_queue = None):
         
-        commands = [f'cd /home/ec2-user/github-cc && nohup python3 {file_name} "{method}" "{queue_url1}" "{region_name1}" "{queue_url2}" "{region_name2}" {check_queue} &']
+        commands = [f'cd /home/ec2-user/github-cc && nohup python3 {file_name} {method} {queue_url1} {region_name1} {queue_url2} {region_name2} {check_queue} &']
         command_id = self.execute_ssm_command(target_instance_id=target_instance_id, commands=commands, comment=f'start {file_name}')
         
         return command_id

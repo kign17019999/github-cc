@@ -62,7 +62,7 @@ if __name__ == '__main__':
             )
     except:
         worker(
-            method = 'multiplication',
+            method = 'addtition',
             queue_url1 = 'https://sqs.us-east-1.amazonaws.com/183243280383/queue_to_worker', 
             region_name1 = 'us-east-1', 
             queue_url2 = 'https://sqs.us-east-1.amazonaws.com/183243280383/queue_to_master', 
