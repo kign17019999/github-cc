@@ -1,5 +1,6 @@
 import master5mp as m5
 import queue_delete_msg as qdm
+import result_log as rl
 
 #******************************************************************************
 
@@ -17,7 +18,7 @@ parallel = False
 
 #******************************************************************************
 
-m5.master(
+result = m5.master(
     method = method,
     queue_url1 = 'https://sqs.us-east-1.amazonaws.com/183243280383/queue_to_worker', 
     region_name1 = 'us-east-1', 
@@ -31,4 +32,10 @@ m5.master(
     randF=0, randT=10, 
     time_before_print_process=5, time_before_resend=15,
     parallel = parallel
+)
+
+rl.add_or_create_log(
+    fileName='metrix_parallel_log.csv',
+    fileDir='/home/ec2-user/github-cc/',
+    dict_data=result
 )

@@ -100,6 +100,20 @@ def master(method, queue_url1, region_name1, queue_url2, region_name2, partition
     print(f'>> total time local system         : {stop_time_local-start_time_local} s')
     print('* * * * * * * * *')
 
+    return_data = {
+        'mat1_size': f'{m1}x{n1}',
+        'mat2_size': f'{m2}x{n2}',
+        'num_packages': partition,
+        'master_multiprocess': parallel,
+        'total_time_local': stop_time_local-start_time_local,
+        'total_time_dist': stop_time_all-start_time_all,
+        'time_decompose': time_for_decompose,
+        'time_sending': time_for_sending,
+        'time_combining': time_for_getting_result,
+        
+        }
+    return return_data
+
 def decompose_mat(method, mp, mat1, mat2, partition, time_before_print_process):
     '''
     This function will decompose two given metrix into a list with index
@@ -309,7 +323,7 @@ def get_results(method, mp, dict_of_matrixs, time_before_resend, time_before_pri
     return final_result, time_for_getting_result
 
 if __name__ == '__main__':
-    master(
+    result = master(
         method = 'addidtion',
         queue_url1 = 'https://sqs.us-east-1.amazonaws.com/183243280383/queue_to_worker', 
         region_name1 = 'us-east-1', 
@@ -324,3 +338,4 @@ if __name__ == '__main__':
         time_before_print_process=5, time_before_resend=15,
         parallel = False
         )
+    print(f'result: {result}')

@@ -14,31 +14,28 @@ def add_or_create_log(fileName, fileDir, dict_data):
         # Create a CSV writer object
             writer = csv.writer(csv_file)
     
-        # Write data to the file
-        writer.writerow(dict_data.keys())
-        writer.writerow(dict_data.values())
-        
-        #for key, value in dict_data.items():
-        #   writer.writerow(['Name', 'Age'])
+            # Write data to the file
+            writer.writerow(dict_data.keys())
+            writer.writerow(dict_data.values())
     else:
         # Open the file in append mode
-        with open(os.path.join(file_dir, file_name), 'a', newline='') as csv_file:
+        with open(os.path.join(file_dir, file_name), 'r', newline='') as csv_file:
         # Create a CSV writer object
             readers = csv.reader(csv_file)
             headers = next(readers)
             append_dict = {}
             for header in headers:
                 append_dict[header] = dict_data[header]
-            with open(os.path.join(file_dir, file_name), 'a', newline='') as csv_file:
-                writer = csv.writer(csv_file)
-                writer.writerow(append_dict.keys())
+        with open(os.path.join(file_dir, file_name), 'a', newline='') as csv_file:
+            writer = csv.writer(csv_file)
+            writer.writerow(append_dict.values())
     return True, fileName, fileDir
 
-if __name__ == '__master__':
+if __name__ == '__main__':
     data1 = random.randint(0, 99)
     data2 = random.randint(0, 99)
     status, fileName, fileDir = add_or_create_log(
-        fileName = 'test_log.csv',
+        fileName = 'log_test.csv',
         fileDir = '/home/ec2-user/github-cc/',
         dict_data = {
             'col1':data1,
