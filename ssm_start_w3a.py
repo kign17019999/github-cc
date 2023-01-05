@@ -17,7 +17,7 @@ response = ssm_client.send_command(
     InstanceIds=[target_instance_id],
     DocumentName=document_name,
     Parameters={'commands': commands},
-    Comment='StartRun',
+    Comment='StartRunR2',
     CloudWatchOutputConfig={
         'CloudWatchLogGroupName': '/aws/ssm/{}'.format(document_name),
         'CloudWatchOutputEnabled': True
