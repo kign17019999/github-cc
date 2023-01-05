@@ -25,7 +25,7 @@ def worker(method, queue_url1, region_name1, queue_url2, region_name2, check_que
             num_in_msg = len(message)
             results = []
             for j in range(num_in_msg):
-                if method == 'addittion':
+                if method == 'addition':
                     one_result = mp.addition(message[j])
                 elif method == 'multiplication':
                     one_result = mp.multiplication(message[j])
