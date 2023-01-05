@@ -275,7 +275,10 @@ def get_results(method, mp, dict_of_matrixs, time_before_resend, time_before_pri
                 sub_index = one_result[1][0]
                 ikey = f'{index}-{sub_index}'
                 if ikey in dict_of_matrixs:
-                    status_combine = mp.combine_addition(one_result)
+                    if method == 'addition':
+                        status_combine = mp.combine_addition(one_result)
+                    elif method == 'multiplication':
+                        status_combine = mp.combine_multiplication(one_result)
                     del dict_of_matrixs[ikey]
             # update counting progress
             count_get+=1
@@ -297,7 +300,7 @@ def get_results(method, mp, dict_of_matrixs, time_before_resend, time_before_pri
                 if time.time()-start_time_resend > time_before_print_process:
                     start_time_resend = time.time()
                     print(f'        trying to resending...{count_resend}/{count_num_for_resend} ')
-                print(f'        trying to resending...{count_resend}/{count_num_for_resend} ')
+            print(f'        finish resending...{count_resend}/{count_num_for_resend} ')
             if count_resend > 0:
                 # timing before resending process (reset after finish previous resend)
                 no_msg_time = time.time()
@@ -319,13 +322,16 @@ def get_results(method, mp, dict_of_matrixs, time_before_resend, time_before_pri
     time_for_getting_result = stop_time_getting_result - start_time_getting_result
 
     # summary getting result time
-    final_result = mp.get_result_addition()
+    if method == 'addition':
+        final_result = mp.get_result_addition()
+    elif method == 'multiplication':
+        final_result = mp.get_result_multiplication()
 
     return final_result, time_for_getting_result
 
 if __name__ == '__main__':
     result = master(
-        method = 'addidtion',
+        method = 'addition',
         queue_url1 = 'https://sqs.us-east-1.amazonaws.com/183243280383/queue_to_worker', 
         region_name1 = 'us-east-1', 
         queue_url2 = 'https://sqs.us-east-1.amazonaws.com/183243280383/queue_to_master', 
