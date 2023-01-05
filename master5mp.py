@@ -101,6 +101,7 @@ def master(method, queue_url1, region_name1, queue_url2, region_name2, partition
     print('* * * * * * * * *')
 
     return_data = {
+        'method': method,
         'mat1_size': f'{m1}x{n1}',
         'mat2_size': f'{m2}x{n2}',
         'num_packages': partition,
