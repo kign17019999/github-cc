@@ -11,7 +11,7 @@ target_instance_id = 'i-011e5c83dd72ef526'
 document_name = 'AWS-RunShellScript'
 
 # Specify the script to run and the working directory
-commands = ['sudo yum install vim git -y && sudo pip3 install numpy && sudo pip3 install boto3 && git clone https://github.com/kign17019999/github-cc.git && cd /home/ec2-user/github-cc']
+commands = ['cd /home/ec2-user/github-cc && sudo yum install vim git -y && sudo pip3 install numpy && sudo pip3 install boto3 && git clone https://github.com/kign17019999/github-cc.git && cd /home/ec2-user/github-cc']
 
 # Send the command to the target instance
 response = ssm_client.send_command(
