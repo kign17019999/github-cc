@@ -4,7 +4,7 @@ import boto3
 ssm_client = boto3.client('ssm', region_name = 'us-east-1')
 
 # Specify the ID of the target instance
-target_instance_id = 'i-0a583c0ad764b4926'
+target_instance_id = 'i-011e5c83dd72ef526'
 
 # Specify the name of the SSM document to use
 document_name = 'AWS-RunShellScript'
