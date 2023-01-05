@@ -8,11 +8,11 @@ def main():
     #******************************************************************************
 
     # design metrix and number of package
-    m1 = 100
-    n1 = 100
-    m2 = 100
-    n2 = 100
-    partition = 100
+    m1 = 5
+    n1 = 5
+    m2 = 5
+    n2 = 5
+    partition = (m1*n2)//1
 
     # config mode
     method = 'addition'
