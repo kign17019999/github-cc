@@ -1,14 +1,14 @@
 import boto3
 
 # Create an SSM client
-ssm = boto3.client('i-089b73b2d2e0c3d6e', region_name = 'us-east-1')
+ssm = boto3.client('i-060cca7073b2c2c34', region_name = 'us-east-1')
 
 # Execute the command on the instance
 response = ssm.send_command(
-    InstanceIds=['i-089b73b2d2e0c3d6e'],
+    InstanceIds=['i-060cca7073b2c2c34'],
     DocumentName='AWS-RunShellScript',
     Comment='Run a script',
-    Parameters={'commands': ['cd github-cc', 'nohup python3 worker3mul.py &']}
+    Parameters={'commands': ['cd /sadsad', 'python3 h.py']}
 )
 
 # Get the command ID
@@ -22,5 +22,5 @@ while not command_completed:
     command_completed = command_status['Status'] == 'Success'
 
 # Get the command output
-command_output = ssm.get_command_invocation(CommandId=command_id, InstanceId='i-089b73b2d2e0c3d6e')
+command_output = ssm.get_command_invocation(CommandId=command_id, InstanceId='i-060cca7073b2c2c34')
 print(command_output['StandardOutputContent'])
