@@ -25,4 +25,4 @@ response = ssm_client.send_command(
 )
 
 # Print the command ID
-print(response)
+print(response['Command']['CommandId'])
