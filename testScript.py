@@ -17,6 +17,7 @@ method = 'addition'
 parallel = False
 
 #******************************************************************************
+exec(open("ssm_start_w3a.py").read())
 
 result = m5.master(
     method = method,
@@ -39,3 +40,5 @@ rl.add_or_create_log(
     fileDir='/home/ec2-user/github-cc/',
     dict_data=result
 )
+
+exec(open("ssm_stop_w3a.py").read())
