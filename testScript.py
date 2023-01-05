@@ -21,10 +21,10 @@ def main():
 
 
     # config URL
-    queue_url1 = 'https://sqs.us-east-1.amazonaws.com/183243280383/queue_to_worker', 
-    region_name1 = 'us-east-1', 
-    queue_url2 = 'https://sqs.us-east-1.amazonaws.com/183243280383/queue_to_master', 
-    region_name2 = 'us-east-1', 
+    queue_url1 = 'https://sqs.us-east-1.amazonaws.com/183243280383/queue_to_worker'
+    region_name1 = 'us-east-1'
+    queue_url2 = 'https://sqs.us-east-1.amazonaws.com/183243280383/queue_to_master'
+    region_name2 = 'us-east-1' 
 
     #******************************************************************************
     #exec(open("ssm_start_w3a.py").read())
@@ -42,7 +42,7 @@ def main():
     git_foldName = 'github-cc'
     
     for id in id_list:
-        b3f.inst_init_updateGit(
+        b3f.inst_updateGit(
             target_instance_id = id, 
             git_url = git_url, 
             git_foldName = git_foldName
