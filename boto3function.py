@@ -73,7 +73,8 @@ class Boto3Function():
 
     def inst_init_setup(self, target_instance_id):
 
-        commands = ['cd /home/ec2-user && sudo yum install vim git -y && sudo pip3 install numpy && sudo pip3 install boto3 && git clone https://github.com/kign17019999/github-cc.git']
+        #commands = ['cd /home/ec2-user && sudo yum install vim git -y && sudo pip3 install numpy && sudo pip3 install boto3 && git clone https://github.com/kign17019999/github-cc.git']
+        commands = ['cd /home/ec2-user && sudo yum install vim git -y && sudo pip3 install numpy && sudo pip3 install boto3']
         command_id = self.execute_ssm_command(target_instance_id=target_instance_id, commands=commands, comment='initial setup instance')
         
         return command_id
@@ -106,6 +107,17 @@ class Boto3Function():
     def start_worker(self, target_instance_id, file_name, method, queue_url1, region_name1, queue_url2, region_name2, check_queue = None):
         
         commands = [f'cd /home/ec2-user/github-cc && nohup python3 {file_name} {method} {queue_url1} {region_name1} {queue_url2} {region_name2} {check_queue} &']
+        
+        file_name_str = '"'+file_name+'"'
+        method_str = '"'+method+'"'
+        queue_url1_str = '"'+queue_url1+'"'
+        region_name1_str = '"'+region_name1+'"'
+        queue_url2_str = '"'+queue_url2
+        region_name2_str = '"'+region_name2+'"'
+
+        commands = [f'cd /home/ec2-user/github-cc && nohup python3 {file_name_str} {method_str} {queue_url1_str} {region_name1_str} {queue_url2_str} {region_name2_str} {check_queue} &']
+
+        
         command_id = self.execute_ssm_command(target_instance_id=target_instance_id, commands=commands, comment=f'start {file_name}')
         
         return command_id

@@ -47,6 +47,7 @@ def main():
             git_url = git_url, 
             git_foldName = git_foldName
             )
+        b3f.inst_init_setup(id)
 
     print('wait for 5 sec...')
     time.sleep(5)
