@@ -43,8 +43,8 @@ if __name__ == '__main__':
     
     with open('dict_file.txt', 'r') as f:
         lines = f.readlines()
-
-    data = lines.split('=')
+    line = lines[0]
+    data = line.split('=')
     keys_and_values = data[1].split(' ')
     result_dict = {}
     for i in range(0, len(keys_and_values), 2):
