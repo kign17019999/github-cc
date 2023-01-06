@@ -49,7 +49,7 @@ def main():
         }
     always_on = [inst_worker_id['1'], inst_worker_id['2']]
     start_by_off = [inst_worker_id['3'], inst_worker_id['4'], inst_worker_id['5'], inst_worker_id['6'], inst_worker_id['7'], inst_worker_id['8']]
-    id_cowork = inst_worker_id['1']
+    id_cowork = [inst_worker_id['1']]
     id_list = [inst_worker_id['2']]
     #id_list = ['i-055336f9cd0657c5c']
     
@@ -60,22 +60,23 @@ def main():
     for id in start_by_off:
         status_off = b3f.ec2_stop(id)
 
-    b3f.inst_updateGit(
-        target_instance_id = id_cowork, 
-        git_url = git_url, 
-        git_foldName = git_foldName
-        )
-    b3f.inst_init_setup(id_cowork)
-    b3f.start_worker(
-        target_instance_id = id_cowork, 
-        file_name = fileName, 
-        method = method, 
-        queue_url1 = queue_url1, 
-        region_name1 = region_name1, 
-        queue_url2 = queue_url2, 
-        region_name2 = region_name2, 
-        check_queue = True
-        )
+    if len(id_cowork) >0:
+        b3f.inst_updateGit(
+            target_instance_id = [id_cowork[0]], 
+            git_url = git_url, 
+            git_foldName = git_foldName
+            )
+        b3f.inst_init_setup([id_cowork[0]])
+        b3f.start_worker(
+            target_instance_id = [id_cowork[0]], 
+            file_name = fileName, 
+            method = method, 
+            queue_url1 = queue_url1, 
+            region_name1 = region_name1, 
+            queue_url2 = queue_url2, 
+            region_name2 = region_name2, 
+            check_queue = True
+            )
     
     for id in id_list:
         b3f.inst_updateGit(
