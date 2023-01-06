@@ -48,7 +48,7 @@ def main():
         '8':'i-068cd621413f03c08'
         }
     always_on = [inst_worker_id['1'], inst_worker_id['2']]
-    start_by_off = [inst_worker_id['3'], inst_worker_id['4'], inst_worker_id['5'], inst_worker_id['6'], inst_worker_id'[7']]
+    start_by_off = [inst_worker_id['3'], inst_worker_id['4'], inst_worker_id['5'], inst_worker_id['6'], inst_worker_id['7'], inst_worker_id['8']]
     id_cowork = [inst_worker_id['1']]
     id_list = [inst_worker_id['2']]
     #id_list = ['i-055336f9cd0657c5c']
