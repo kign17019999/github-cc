@@ -112,7 +112,7 @@ class Boto3Function():
         method_str = '"'+method+'"'
         queue_url1_str = '"'+queue_url1+'"'
         region_name1_str = '"'+region_name1+'"'
-        queue_url2_str = '"'+queue_url2
+        queue_url2_str = '"'+queue_url2+'"'
         region_name2_str = '"'+region_name2+'"'
 
         commands = [f'cd /home/ec2-user/github-cc && nohup python3 {file_name_str} {method_str} {queue_url1_str} {region_name1_str} {queue_url2_str} {region_name2_str} {check_queue} &']
