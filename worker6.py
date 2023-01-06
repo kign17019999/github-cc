@@ -34,8 +34,7 @@ def worker(method, queue_url1, region_name1, queue_url2, region_name2, check_que
             count+=1
             print(f'    {count}: Done process & Sent result with msg_id: {message_id}')
         if time.time() - start_time > time_before_evaluate_queue:
-            status = evaluate_queue.evaluate_queue()
-            print(status)
+            evaluate_queue.evaluate_queue('worker6.py', method, queue_url1, region_name1, queue_url2, region_name2)
             start_time = time.time()
 
 

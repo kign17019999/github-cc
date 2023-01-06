@@ -3,6 +3,7 @@ from matrixparallel_v2 import MatrixParallel
 import numpy as np
 import time
 import multiprocessing
+import __main__
 
 '''
 This python file has 'master function' as a main (which call from if __name__ == '__main__')
@@ -34,6 +35,7 @@ HOW TO USE:
 
 def master(method, queue_url1, region_name1, queue_url2, region_name2, partition=10, m1=10, n1=10, m2=10, n2=10, randF=0, randT=10, time_before_print_process=5, time_before_resend=15, parallel=False):
     print('* * * * * * * * *')
+    print(__main__.__file__)
     print(f'acting as a master for {method}')
 
     # metrix operation

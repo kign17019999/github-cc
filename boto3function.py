@@ -92,18 +92,6 @@ class Boto3Function():
         
         return command_id
 
-    def start_worker_addition(self, target_instance_id, file_name):
-        commands = [f'cd /home/ec2-user/github-cc && nohup python3 {file_name} &']
-        command_id = self.execute_ssm_command(target_instance_id=target_instance_id, commands=commands, comment=f'start {file_name}')
-        
-        return command_id
-
-    def stop_worker_addition(self, target_instance_id, file_name):
-        commands = ['kill $(ps aux | grep {} | awk '"'"'{{print $2}}'"'"')'.format(file_name)]
-        command_id = self.execute_ssm_command(target_instance_id=target_instance_id, commands=commands, comment=f'stop {file_name}')
-        
-        return command_id
-
     def start_worker(self, target_instance_id, file_name, method, queue_url1, region_name1, queue_url2, region_name2, check_queue = None):
         
         '''
