@@ -108,14 +108,13 @@ class Boto3Function():
         
         commands = [f'cd /home/ec2-user/github-cc && nohup python3 {file_name} {method} {queue_url1} {region_name1} {queue_url2} {region_name2} {check_queue} &']
         
-        file_name_str = '"'+file_name+'"'
-        method_str = '"'+method+'"'
-        queue_url1_str = '"'+queue_url1+'"'
-        region_name1_str = '"'+region_name1+'"'
-        queue_url2_str = '"'+queue_url2+'"'
-        region_name2_str = '"'+region_name2+'"'
+        method_str = "'"+method+"'"
+        queue_url1_str = "'"+queue_url1+"'"
+        region_name1_str = "'"+region_name1+"'"
+        queue_url2_str = "'"+queue_url2+"'"
+        region_name2_str = "'"+region_name2+"'"
 
-        commands = [f'cd /home/ec2-user/github-cc && nohup python3 {file_name_str} {method_str} {queue_url1_str} {region_name1_str} {queue_url2_str} {region_name2_str} {check_queue} &']
+        commands = [f'cd /home/ec2-user/github-cc && nohup python3 {file_name} {method_str} {queue_url1_str} {region_name1_str} {queue_url2_str} {region_name2_str} {check_queue} &']
 
         
         command_id = self.execute_ssm_command(target_instance_id=target_instance_id, commands=commands, comment=f'start {file_name}')
