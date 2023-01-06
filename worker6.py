@@ -9,7 +9,7 @@ import __main__
 time_before_evaluate_queue = 10
 
 def worker(method, queue_url1, region_name1, queue_url2, region_name2, check_queue = None):
-    print(f'check_queue = {check_queue}')
+    #print(f'check_queue = {check_queue}')
     sqs_function1 = SQSFunction(queue_url1, region_name1)
     sqs_function2 = SQSFunction(queue_url2, region_name2)
     
@@ -34,7 +34,7 @@ def worker(method, queue_url1, region_name1, queue_url2, region_name2, check_que
             message_id = sqs_function2.send_message(message=results)
             count+=1
             print(f'    {count}: Done process & Sent result with msg_id: {message_id}')
-        if check_queue == True:
+        if check_queue == str(True):
             if time.time() - start_time > time_before_evaluate_queue:
                 evaluate_queue.evaluate_queue(str(__main__.__file__), method, queue_url1, region_name1, queue_url2, region_name2)
                 start_time = time.time()
@@ -43,8 +43,8 @@ def worker(method, queue_url1, region_name1, queue_url2, region_name2, check_que
 if __name__ == '__main__':
     
     try:
-        method = sys.argv[0]
-        check_queue = sys.argv[1]
+        method = sys.argv[1]
+        check_queue = sys.argv[2]
         worker(
             method = method,
             queue_url1 = 'https://sqs.us-east-1.amazonaws.com/183243280383/queue_to_worker',

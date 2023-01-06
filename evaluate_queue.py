@@ -19,7 +19,7 @@ def evaluate_queue(fileName, method, queue_url1, region_name1, queue_url2, regio
     for key, value in inst_dict.items():
         print(f'Instance name: {key}, Instance ID: {value[0]}, Running status: {value[1]}')
 
-    if num_inQueue > step_spin:
+    if num_inQueue[1] > step_spin:
         inst_dict = b3f.ec2_status()
         for key, value in inst_dict.items():
             #print(f'Instance name: {key}, Instance ID: {value[0]}, Running status: {value[1]}')
