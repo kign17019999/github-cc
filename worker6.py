@@ -9,7 +9,7 @@ import __main__
 time_before_evaluate_queue = 10
 
 def worker(method, queue_url1, region_name1, queue_url2, region_name2, check_queue = None):
-    
+    print(f'check_queue = {check_queue}')
     sqs_function1 = SQSFunction(queue_url1, region_name1)
     sqs_function2 = SQSFunction(queue_url2, region_name2)
     
