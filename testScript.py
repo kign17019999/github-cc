@@ -32,10 +32,10 @@ def main():
     b3f = Boto3Function(region_name1)
 
     inst_dict = b3f.ec2_status()
-    
+    print('-----------------------------------------------')
     for key, value in inst_dict.items():
         print(f'Instance name: {key}, Instance ID: {value[0]}, Running status: {value[1]}')
-
+    print('-----------------------------------------------')
 
     inst_worker_id = {
         '1':'i-0a583c0ad764b4926',
@@ -85,7 +85,7 @@ def main():
             )
         b3f.inst_init_setup(id)
 
-    time.sleep(5)
+    #time.sleep(5)
 
     for id in id_list:
         b3f.start_worker(
@@ -98,7 +98,10 @@ def main():
             region_name2 = region_name2, 
             check_queue = None
         )
-
+    print('-----------------------------------------------')
+    for key, value in inst_dict.items():
+        print(f'Instance name: {key}, Instance ID: {value[0]}, Running status: {value[1]}')
+    print('-----------------------------------------------')
     result = m5.master(
         method = method,
         queue_url1 = queue_url1, 
