@@ -106,20 +106,37 @@ class Boto3Function():
 
     def start_worker(self, target_instance_id, file_name, method, queue_url1, region_name1, queue_url2, region_name2, check_queue = None):
         
-        commands = [f'cd /home/ec2-user/github-cc && nohup python3 {file_name} {method} {queue_url1} {region_name1} {queue_url2} {region_name2} {check_queue} &']
+        '''
+        #commands = [f'cd /home/ec2-user/github-cc && nohup python3 {file_name} {method} {queue_url1} {region_name1} {queue_url2} {region_name2} {check_queue} &']
         
-        method_str = "'"+method+"'"
-        queue_url1_str = "'"+queue_url1+"'"
-        region_name1_str = "'"+region_name1+"'"
-        queue_url2_str = "'"+queue_url2+"'"
-        region_name2_str = "'"+region_name2+"'"
+        #method_str = "'"+method+"'"
+        #queue_url1_str = "'"+queue_url1+"'"
+        #region_name1_str = "'"+region_name1+"'"
+        #queue_url2_str = "'"+queue_url2+"'"
+        #region_name2_str = "'"+region_name2+"'"
 
+        
         commands = [f'cd /home/ec2-user/github-cc && nohup python3 {file_name} {method_str} {queue_url1_str} {region_name1_str} {queue_url2_str} {region_name2_str} {check_queue} &']
-
-        
         command_id = self.execute_ssm_command(target_instance_id=target_instance_id, commands=commands, comment=f'start {file_name}')
-        
-        return command_id
+        '''
+
+        dict_name = 'DICT_NAME'
+        dict_contents = {
+            'file_name': file_name, 
+            'method': method, 
+            'queue_url1': queue_url1,
+            'region_name1':region_name1,
+            'queue_url2':queue_url2,
+            'region_name2':region_name2,
+            'check_queue':check_queue
+            }
+        dict_string = ' '.join(['{} {}'.format(key, value) for key, value in dict_contents.items()])
+        commands = ['cd /home/ec2-user/github-cc && echo {}={} >> dict_file.txt'.format(dict_name, dict_string)]
+        command_id0 = self.execute_ssm_command(target_instance_id=target_instance_id, commands=commands, comment=f'start {file_name}')
+
+        commands = [f'cd /home/ec2-user/github-cc && nohup python3 {file_name} &']
+        command_id1 = self.execute_ssm_command(target_instance_id=target_instance_id, commands=commands, comment=f'start {file_name}')
+        return command_id1
 
     def stop_worker(self, target_instance_id, file_name, method, queue_url1, region_name1, queue_url2, region_name2, check_queue = None):
         #commands = ['kill $(ps aux | grep {} {} {} {} {} {} {} | awk '"'"'{{print $2}}'"'"')'.format(file_name, method, queue_url1, region_name1, queue_url2, region_name2, check_queue)]

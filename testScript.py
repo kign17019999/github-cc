@@ -38,7 +38,7 @@ def main():
 
     #id_list = ['i-0a583c0ad764b4926', 'i-055336f9cd0657c5c']
     id_list = ['i-055336f9cd0657c5c']
-    fileName = 'worker5.py'
+    fileName = 'worker5_1.py'
     git_url = 'https://github.com/kign17019999/github-cc.git'
     git_foldName = 'github-cc'
     

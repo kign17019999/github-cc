@@ -41,31 +41,28 @@ def worker(method, queue_url1, region_name1, queue_url2, region_name2, check_que
 
 if __name__ == '__main__':
     
-    try: 
-        method = sys.argv[0]
-        queue_url1 = sys.argv[1]
-        region_name1 = sys.argv[2]
-        queue_url2 = sys.argv[3]
-        region_name2 = sys.argv[4]
-        try:
-            check_queue = sys.argv[5]
-        except:
-            check_queue = None
-        
-        worker(
-            method = method,
-            queue_url1 = queue_url1, 
-            region_name1 = region_name1, 
-            queue_url2 = queue_url2, 
-            region_name2 = region_name2,
-            check_queue = check_queue
-            )
-    except:
-        worker(
-            method = 'addition',
-            queue_url1 = 'https://sqs.us-east-1.amazonaws.com/183243280383/queue_to_worker', 
-            region_name1 = 'us-east-1', 
-            queue_url2 = 'https://sqs.us-east-1.amazonaws.com/183243280383/queue_to_master', 
-            region_name2 = 'us-east-1',
-            check_queue = None
-            )
+    with open('dict_file.txt', 'r') as f:
+        lines = f.readlines()
+        pairs = [line.strip().split('=') for line in lines]
+        keys_and_values = [pair[1].split(' ') for pair in pairs]
+        result_dict = {key: value for key, value in keys_and_values}
+    
+    worker(
+        method = result_dict['method'],
+        queue_url1 = result_dict['queue_url1'],
+        region_name1 = result_dict['region_name1'],
+        queue_url2 = result_dict['queue_url2'],
+        region_name2 = result_dict['region_name2'],
+        check_queue = result_dict['check_queue']
+        )
+    
+    '''
+    worker(
+        method = 'addition',
+        queue_url1 = 'https://sqs.us-east-1.amazonaws.com/183243280383/queue_to_worker', 
+        region_name1 = 'us-east-1', 
+        queue_url2 = 'https://sqs.us-east-1.amazonaws.com/183243280383/queue_to_master', 
+        region_name2 = 'us-east-1',
+        check_queue = None
+        )
+    '''
