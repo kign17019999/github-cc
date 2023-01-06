@@ -38,7 +38,7 @@ def main():
 
     #id_list = ['i-0a583c0ad764b4926', 'i-055336f9cd0657c5c']
     id_list = ['i-055336f9cd0657c5c']
-    fileName = 'worker5_1.py'
+    fileName = 'worker6.py'
     git_url = 'https://github.com/kign17019999/github-cc.git'
     git_foldName = 'github-cc'
     
@@ -50,7 +50,6 @@ def main():
             )
         b3f.inst_init_setup(id)
 
-    print('wait for 5 sec...')
     time.sleep(5)
 
     for id in id_list:
