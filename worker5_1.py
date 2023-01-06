@@ -43,10 +43,13 @@ if __name__ == '__main__':
     
     with open('dict_file.txt', 'r') as f:
         lines = f.readlines()
-        pairs = [line.strip().split('=') for line in lines]
-        keys_and_values = [pair[1].split(' ') for pair in pairs]
-        result_dict = {key: value for key, value in keys_and_values}
-    
+
+    data = lines.strip().split('=')
+    keys_and_values = data[1].split(' ')
+    result_dict = {}
+    for i in range(0, len(keys_and_values), 2):
+        result_dict[keys_and_values[i]] = keys_and_values[i+1]
+
     worker(
         method = result_dict['method'],
         queue_url1 = result_dict['queue_url1'],
