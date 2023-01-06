@@ -4,6 +4,7 @@ import evaluate_queue
 import numpy as np
 import sys
 import time
+import __main__
 
 time_before_evaluate_queue = 10
 
@@ -33,9 +34,10 @@ def worker(method, queue_url1, region_name1, queue_url2, region_name2, check_que
             message_id = sqs_function2.send_message(message=results)
             count+=1
             print(f'    {count}: Done process & Sent result with msg_id: {message_id}')
-        if time.time() - start_time > time_before_evaluate_queue:
-            evaluate_queue.evaluate_queue('worker6.py', method, queue_url1, region_name1, queue_url2, region_name2)
-            start_time = time.time()
+        if check_queue == True:
+            if time.time() - start_time > time_before_evaluate_queue:
+                evaluate_queue.evaluate_queue(str(__main__.__file__), method, queue_url1, region_name1, queue_url2, region_name2)
+                start_time = time.time()
 
 
 if __name__ == '__main__':

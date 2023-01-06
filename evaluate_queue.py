@@ -31,6 +31,12 @@ def evaluate_queue(fileName, method, queue_url1, region_name1, queue_url2, regio
                     inst_dict = b3f.ec2_status()
                     if inst_dict[instance_name][1] == 'running':
                         break
+                b3f.inst_updateGit(
+                    target_instance_id = id_spin, 
+                    git_url = git_url, 
+                    git_foldName = git_foldName
+                    )
+                b3f.inst_init_setup(id_spin)
                 b3f.start_worker(
                     target_instance_id = id_spin, 
                     file_name = fileName, 
@@ -48,7 +54,7 @@ def evaluate_queue(fileName, method, queue_url1, region_name1, queue_url2, regio
         for key, value in inst_dict.items():
             if value[1] != 'stopped' and value[1] != 'stopping':
                 if key not in always_on:
-                    status_off = b3f.ec2_start(value[0])
+                    status_off = b3f.ec2_stop(value[0])
     
     num_inQueue = b3f.sqs_check_queue(queue_url)
     inst_dict = b3f.ec2_status()

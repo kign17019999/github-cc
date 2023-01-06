@@ -36,11 +36,46 @@ def main():
     for key, value in inst_dict.items():
         print(f'Instance name: {key}, Instance ID: {value[0]}, Running status: {value[1]}')
 
-    id_list = ['i-0a583c0ad764b4926', 'i-055336f9cd0657c5c']
+
+    inst_worker_id = {
+        '1':'i-0a583c0ad764b4926',
+        '2':'i-055336f9cd0657c5c',
+        '3':'i-08fa110b2324b11c5',
+        '4':'i-0d4f2d3a0d1f239bb',
+        '5':'i-0faf62a75a784809a',
+        '6':'i-011e5c83dd72ef526',
+        '7':'i-0c2111a6e13bc4637',
+        '8':'i-068cd621413f03c08'
+        }
+    always_on = [inst_worker_id[1], inst_worker_id[2]]
+    start_by_off = [inst_worker_id[3], inst_worker_id[4], inst_worker_id[5], inst_worker_id[6], inst_worker_id[7]]
+    id_cowork = [inst_worker_id[1]]
+    id_list = [inst_worker_id[2]]
     #id_list = ['i-055336f9cd0657c5c']
+    
     fileName = 'worker6.py'
     git_url = 'https://github.com/kign17019999/github-cc.git'
     git_foldName = 'github-cc'
+    
+    for id in start_by_off:
+        status_off = b3f.ec2_stop(id)
+
+    b3f.inst_updateGit(
+        target_instance_id = id_cowork, 
+        git_url = git_url, 
+        git_foldName = git_foldName
+        )
+    b3f.inst_init_setup(id_cowork)
+    b3f.start_worker(
+        target_instance_id = id_cowork, 
+        file_name = fileName, 
+        method = method, 
+        queue_url1 = queue_url1, 
+        region_name1 = region_name1, 
+        queue_url2 = queue_url2, 
+        region_name2 = region_name2, 
+        check_queue = True
+        )
     
     for id in id_list:
         b3f.inst_updateGit(
