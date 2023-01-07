@@ -29,6 +29,7 @@ def print_message():
 
 
 def main():
+    time.sleep(2)
     global should_stop
 
     #******************************************************************************
@@ -60,7 +61,7 @@ def main():
     print('    finish')
 
     #******************************************************************************
-    time.sleep(1)
+
     b3f = Boto3Function(region_name1)
     inst_dict = b3f.ec2_status()    
 
