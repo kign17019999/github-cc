@@ -31,12 +31,6 @@ def print_message():
 def main():
     global should_stop
 
-    # delete everything inqueue befoer perform command
-    queue_delete_msg.delete_msg(queue_url1, region_name1)
-    print('finish')
-    queue_delete_msg.delete_msg(queue_url2, region_name2)
-    print('finish')
-
     #******************************************************************************
 
     # design metrix and number of package
@@ -57,6 +51,12 @@ def main():
     region_name1 = 'us-east-1'
     queue_url2 = 'https://sqs.us-east-1.amazonaws.com/183243280383/queue_to_master'
     region_name2 = 'us-east-1' 
+
+    # delete everything inqueue befoer perform command
+    queue_delete_msg.delete_msg(queue_url1, region_name1)
+    print('finish')
+    queue_delete_msg.delete_msg(queue_url2, region_name2)
+    print('finish')
 
     #******************************************************************************
     time.sleep(1)
