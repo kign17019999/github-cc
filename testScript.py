@@ -19,7 +19,8 @@ def print_message():
         for key, value in inst_dict.items():
             #print(f'Instance name: {key}, Instance ID: {value[0]}, Running status: {value[1]}')
             if 'Worker' in key:
-                print(f'Instance name: {key}, Running status: {value[1]}')
+                #print(f'Instance name: {key}, Running status: {value[1]}')
+                print(f'Instance name: {key}, Instance ID: {value[0]}, Running status: {value[1]}')
         print('-----------------------------------------------')
         time.sleep(t)
     
