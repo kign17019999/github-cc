@@ -7,21 +7,26 @@ import time
 names = []
 ids = []
 status = []
+should_stop = 0
 
 import threading
 def print_message():
     names
     t = 5
-    while True:
-        print(f"This message will be printed every {t} seconds")
-        for i in range(len(names)):
-            print(f'worker {names[i]} {ids[i]} {status[i]}')
+    while should_stop == 0:
+        b3f = Boto3Function('us-east-1')
+        inst_dict = b3f.ec2_status()
+        print('-----------------------------------------------')
+        for key, value in inst_dict.items():
+            print(f'Instance name: {key}, Instance ID: {value[0]}, Running status: {value[1]}')
+        print('-----------------------------------------------')
         time.sleep(t)
-#thread = threading.Thread(target=print_message)
-#thread.start()
+    
+
+
 
 def main():
-    global names, ids, status
+    global should_stop
 
     #******************************************************************************
 
@@ -46,25 +51,17 @@ def main():
 
     #******************************************************************************
     #exec(open("ssm_start_w3a.py").read())
-    time.sleep(2)
+    time.sleep(1)
     b3f = Boto3Function(region_name1)
 
+    '''
     inst_dict = b3f.ec2_status()
-    ii = 0
     print('-----------------------------------------------')
     for key, value in inst_dict.items():
         print(f'Instance name: {key}, Instance ID: {value[0]}, Running status: {value[1]}')
         
-        #names[ii] = key
-        #ids[ii] = value[0]
-        #status[ii] = value[1]
-
-        names.append(ii+1)
-        ids.append(ii+2)
-        status.append(ii+3)
-
-        ii+=1
     print('-----------------------------------------------')
+    '''
 
     inst_worker_id = {
         '1':'i-0a583c0ad764b4926',
@@ -168,6 +165,7 @@ def main():
             check_queue = None
         )
 
+    should_stop = 1
 
 if __name__ == '__main__':
     
