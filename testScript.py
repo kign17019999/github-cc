@@ -65,10 +65,10 @@ def main():
         '7':'i-0c2111a6e13bc4637',
         '8':'i-068cd621413f03c08'
         }
-    always_on = [inst_worker_id['1'], inst_worker_id['2']]
-    #start_by_off = [inst_worker_id['3'], inst_worker_id['4'], inst_worker_id['5'], inst_worker_id['6'], inst_worker_id['7'], inst_worker_id['8']]
-    start_by_off = []
-    id_cowork = ""
+    always_on = [inst_worker_id['1'], inst_worker_id['2'], inst_worker_id['3']]
+    start_by_off = [inst_worker_id['4'], inst_worker_id['5'], inst_worker_id['6'], inst_worker_id['7'], inst_worker_id['8']]
+    #start_by_off = []
+    id_cowork = [inst_worker_id['2']]
     id_list = [inst_worker_id['2'], inst_worker_id['3']]
     #id_list = ['i-055336f9cd0657c5c']
     
@@ -81,13 +81,13 @@ def main():
 
     if len(id_cowork) >0:
         b3f.inst_updateGit(
-            target_instance_id = [id_cowork[0]], 
+            target_instance_id = id_cowork[0], 
             git_url = git_url, 
             git_foldName = git_foldName
             )
-        b3f.inst_init_setup([id_cowork[0]])
+        b3f.inst_init_setup(id_cowork[0])
         b3f.start_worker(
-            target_instance_id = [id_cowork[0]], 
+            target_instance_id = id_cowork[0], 
             file_name = fileName, 
             method = method, 
             queue_url1 = queue_url1, 
