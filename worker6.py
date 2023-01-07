@@ -70,5 +70,5 @@ if __name__ == '__main__':
             region_name1 = result_dict['region_name1'],
             queue_url2 = result_dict['queue_url2'],
             region_name2 = result_dict['region_name2'],
-            check_queue = result_dict['check_queue']
+            check_queue = result_dict['check_queue'].rstrip()
             )
