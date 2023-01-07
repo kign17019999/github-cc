@@ -84,6 +84,23 @@ def main():
     git_url = 'https://github.com/kign17019999/github-cc.git'
     git_foldName = 'github-cc'
     
+    for id in always_on:
+        status1 = ""
+        while status1 != 'yes':
+            try:
+                b3f.stop_worker(
+                    target_instance_id = id, 
+                    file_name = fileName, 
+                    method = method, 
+                    queue_url1 = queue_url1, 
+                    region_name1 = region_name1, 
+                    queue_url2 = queue_url2, 
+                    region_name2 = region_name2, 
+                    check_queue = None
+                )
+                status1 = 'yes'
+            except:
+                pass
 
     for id in always_on:
         status1 = ""
@@ -180,17 +197,24 @@ def main():
     )
 
     #exec(open("ssm_stop_w3a.py").read())
-    for id in id_list:
-        b3f.stop_worker(
-            target_instance_id = id, 
-            file_name = fileName, 
-            method = method, 
-            queue_url1 = queue_url1, 
-            region_name1 = region_name1, 
-            queue_url2 = queue_url2, 
-            region_name2 = region_name2, 
-            check_queue = None
-        )
+    for id in always_on:
+        status1 = ""
+        while status1 != 'yes':
+            try:
+                b3f.stop_worker(
+                    target_instance_id = id, 
+                    file_name = fileName, 
+                    method = method, 
+                    queue_url1 = queue_url1, 
+                    region_name1 = region_name1, 
+                    queue_url2 = queue_url2, 
+                    region_name2 = region_name2, 
+                    check_queue = None
+                )
+                status1 = 'yes'
+            except:
+                pass
+
 
     should_stop = 1
 
