@@ -26,6 +26,7 @@ def evaluate_queue(fileName, method, queue_url1, region_name1, queue_url2, regio
             if value[1] != 'running':
                 id_spin = value[0]
                 instance_name = key
+                status1 = ""
                 while status1 != 'yes':
                     try:
                         status_on = b3f.ec2_start(id_spin)
