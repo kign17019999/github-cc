@@ -3,6 +3,7 @@ import queue_delete_msg as qdm
 import result_log as rl
 from boto3function import Boto3Function
 import time
+import queue_delete_msg
 
 should_stop = 0
 
@@ -29,6 +30,12 @@ def print_message():
 
 def main():
     global should_stop
+
+    # delete everything inqueue befoer perform command
+    queue_delete_msg.delete_msg(queue_url1, region_name1)
+    print('finish')
+    queue_delete_msg.delete_msg(queue_url2, region_name2)
+    print('finish')
 
     #******************************************************************************
 
