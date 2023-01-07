@@ -343,13 +343,13 @@ def get_results(method, mp, dict_of_matrixs, time_before_resend, time_before_pri
             inst_dict = b3f.ec2_status()
             num_running_instance = 0
             for key, value in inst_dict.items():
-                if 'Worker' in key and value[1 == 'running']:
+                if 'Worker' in key and value[1] == 'running':
                     num_running_instance +=1
             num_inQueue_master = b3f.sqs_check_queue(queue_url1)
             num_inQueue_worker = b3f.sqs_check_queue(queue_url2)
 
-            log_msg_in_queue_worker.append(num_inQueue_master)
-            log_msg_in_queue_master.append(num_inQueue_worker)
+            log_msg_in_queue_worker.append(num_inQueue_master[1])
+            log_msg_in_queue_master.append(num_inQueue_worker[1])
             log_num_instance.append(num_running_instance)
             log_time.append(start_time)
 
