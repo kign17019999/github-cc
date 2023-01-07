@@ -79,9 +79,9 @@ def main():
 
     for id in always_on:
         status_on = b3f.ec2_start(id)
-        inst_dict = b3f.ec2_status()   
         status0 = ""
         while status0 != 'running':
+            inst_dict = b3f.ec2_status()  
             for key, value in inst_dict.items():
                 if inst_dict[key][0] == id:
                     print(f'waiting {id} : {inst_dict[key][1]}')
