@@ -3,9 +3,9 @@ from matrixparallel_v2_temp import MatrixParallel as mpold
 import numpy as np
 import time
 
-partition=500
+partition=10
 #partition=5
-m1=1000
+m1=10
 n1=m1
 m2=m1
 n2=m1
@@ -48,9 +48,12 @@ pack_of_matrixs3, dict_of_matrixs = mp.decompose_for_multiplication(mat1, mat2, 
 finish3 = time.time() - start_time3 
 
 start_time4 = time.time()
-#pack_of_matrixs4, dict_of_matrixs = mp2.decompose_for_multiplication(mat1, mat2, partition, time_before_print_process)
+pack_of_matrixs4, dict_of_matrixs = mp2.decompose_for_multiplication(mat1, mat2, partition, time_before_print_process)
 finish4 = time.time() - start_time4
 
-#print(pack_of_matrixs1 == pack_of_matrixs2)
+print(pack_of_matrixs3 == pack_of_matrixs4)
 print(finish3)
 print(finish4)
+
+print(pack_of_matrixs3[0])
+print(pack_of_matrixs4[0])

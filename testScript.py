@@ -16,13 +16,13 @@ def print_message():
         inst_dict = b3f.ec2_status()
         names = []
         status = []
-        print('-----------------------------------------------')
+        print('----------------------------------------------------------------------------------------')
         for key, value in inst_dict.items():
             #print(f'Instance name: {key}, Instance ID: {value[0]}, Running status: {value[1]}')
             if 'Worker' in key:
                 #print(f'Instance name: {key}, Running status: {value[1]}')
                 print(f'Instance name: {key}, Instance ID: {value[0]}, Running status: {value[1]}')
-        print('-----------------------------------------------')
+        print('----------------------------------------------------------------------------------------')
         time.sleep(t)
     
 
@@ -35,15 +35,16 @@ def main():
     #******************************************************************************
 
     # design metrix and number of package
-    m1 = 100
+    m1 = 10
     n1 = m1
     m2 = m1
     n2 = m1
-    partition = (m1*n2)//1
+    #partition = (m1*n2)//1
+    partition = 10
 
     # config mode
-    method = 'addition'
-    #method = 'multiplication'
+    #method = 'addition'
+    method = 'multiplication'
     parallel = True
 
 
@@ -148,6 +149,7 @@ def main():
             region_name2 = region_name2, 
             check_queue = True
             )
+        time.sleep(1)
     
     for id in id_list:
         status1 = ""

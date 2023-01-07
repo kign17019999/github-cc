@@ -189,7 +189,7 @@ class MatrixParallel:
         start_time = time.time()
         for i, j in itertools.product(range(result_row), range(result_col)):
             sub_matrix1 = matrix1[i, :].reshape(1, -1)
-            sub_matrix2 = matrix2[:, j].reshape(1, -1)
+            sub_matrix2 = matrix2[:, j].reshape(-1, 1)
             if num_max_in_each_parition != 0:
                 sub_of_sub_matrixs1 = np.array_split(sub_matrix1, max_in_each_parition, axis = 1)
                 sub_of_sub_matrixs2 = np.array_split(sub_matrix2, max_in_each_parition, axis = 0)
