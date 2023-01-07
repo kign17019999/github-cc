@@ -32,9 +32,9 @@ def main():
 
     # design metrix and number of package
     m1 = 50
-    n1 = 10
-    m2 = 10
-    n2 = 50
+    n1 = m1
+    m2 = m1
+    n2 = m1
     partition = (m1*n2)//1
 
     # config mode
