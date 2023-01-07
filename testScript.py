@@ -32,7 +32,7 @@ def main():
     #******************************************************************************
 
     # design metrix and number of package
-    m1 = 50
+    m1 = 20
     n1 = m1
     m2 = m1
     n2 = m1
@@ -68,7 +68,7 @@ def main():
     always_on = [inst_worker_id['1'], inst_worker_id['2']]
     #start_by_off = [inst_worker_id['3'], inst_worker_id['4'], inst_worker_id['5'], inst_worker_id['6'], inst_worker_id['7'], inst_worker_id['8']]
     start_by_off = []
-    id_cowork = []
+    id_cowork = ""
     id_list = [inst_worker_id['2'], inst_worker_id['3']]
     #id_list = ['i-055336f9cd0657c5c']
     
