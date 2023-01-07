@@ -55,7 +55,7 @@ if __name__ == '__main__':
             check_queue = check_queue
             )
     except:
-        with open('dict_file.txt', 'r') as f:
+        with open('START_CONFIG.txt', 'r') as f:
             lines = f.readlines()
         line = lines[0]
         data = line.split('=')

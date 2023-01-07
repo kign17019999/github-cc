@@ -1,5 +1,6 @@
 from sqsfunction import SQSFunction
 from matrixparallel_v2 import MatrixParallel
+from boto3function import Boto3Function
 import queue_delete_msg
 import numpy as np
 import time
@@ -63,7 +64,7 @@ def master(method, queue_url1, region_name1, queue_url2, region_name2, partition
         time_for_sending = send_msg(method, m1, n1, m2, n2, partition, time_before_print_process, pack_of_matrixs, queue_url1, region_name1)
 
         print('start getting result & combine...')
-        final_result, time_for_getting_result = get_results(method, mp, dict_of_matrixs, time_before_resend, time_before_print_process, partition, queue_url1, region_name1, queue_url2, region_name2)
+        final_result, time_for_getting_result, log_during_combining = get_results(method, mp, dict_of_matrixs, time_before_resend, time_before_print_process, partition, queue_url1, region_name1, queue_url2, region_name2)
 
     elif parallel == True:
         # create a pool of worker processor
@@ -81,7 +82,7 @@ def master(method, queue_url1, region_name1, queue_url2, region_name2, partition
 
         # getting the return from each parallel function
         time_for_sending = temp_send.get()
-        final_result, time_for_getting_result = temp_get.get()
+        final_result, time_for_getting_result, log_during_combining = temp_get.get()
 
     # stop timing overall process by distributed system
     stop_time_all = time.time()
@@ -113,7 +114,8 @@ def master(method, queue_url1, region_name1, queue_url2, region_name2, partition
     print(f'>> total time local system      : {stop_time_local-start_time_local} s')
     print('-----------------------------------------------')
     print('* * * * * end * * * * *')
-
+    
+    #log_during_combining = [log_msg_in_queue_worker, log_msg_in_queue_master, log_num_instance, log_time]
     return_data = {
         'method': method,
         'mat1_size': f'{m1}x{n1}',
@@ -126,7 +128,10 @@ def master(method, queue_url1, region_name1, queue_url2, region_name2, partition
         'time_decompose': time_for_decompose,
         'time_sending': time_for_sending,
         'time_combining': time_for_getting_result,
-        
+        'log_msg_in_queue_worker': log_during_combining[0],
+        'log_msg_in_queue_master': log_during_combining[1],
+        'log_num_instance': log_during_combining[2],
+        'log_time': log_during_combining[3]
         }
     return return_data
 
@@ -277,6 +282,12 @@ def get_results(method, mp, dict_of_matrixs, time_before_resend, time_before_pri
     count_get_result = 0
     
     want_result = len(dict_of_matrixs)
+    
+    b3f = Boto3Function('us-east-1')
+    log_msg_in_queue_worker = []
+    log_msg_in_queue_master = []
+    log_num_instance = []
+    log_time = []
 
     # looping for getting result
     while True:
@@ -328,6 +339,19 @@ def get_results(method, mp, dict_of_matrixs, time_before_resend, time_before_pri
         if time.time()-start_time > time_before_print_process:
             start_time = time.time()
             print(f'    trying to get results...{count_get}/{partition} packages | {count_get_result}/{want_result} sub-result')
+            
+            inst_dict = b3f.ec2_status()
+            num_running_instance = 0
+            for key, value in inst_dict.items():
+                if 'Worker' in key and value[1 == 'running']:
+                    num_running_instance +=1
+            num_inQueue_master = b3f.sqs_check_queue(queue_url1)
+            num_inQueue_worker = b3f.sqs_check_queue(queue_url2)
+
+            log_msg_in_queue_worker.append(num_inQueue_master)
+            log_msg_in_queue_master.append(num_inQueue_worker)
+            log_num_instance.append(num_running_instance)
+            log_time.append(start_time)
 
         # check if all of get equal to number of package >> break the loop (because it is done)
         if len(dict_of_matrixs) == 0:
@@ -344,7 +368,8 @@ def get_results(method, mp, dict_of_matrixs, time_before_resend, time_before_pri
     elif method == 'multiplication':
         final_result = mp.get_result_multiplication()
 
-    return final_result, time_for_getting_result
+    log_during_combining = [log_msg_in_queue_worker, log_msg_in_queue_master, log_num_instance, log_time]
+    return final_result, time_for_getting_result, log_during_combining
 
 if __name__ == '__main__':
     result = master(

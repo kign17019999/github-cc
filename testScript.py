@@ -35,12 +35,12 @@ def main():
     #******************************************************************************
 
     # design metrix and number of package
-    m1 = 10
+    m1 = 40
     n1 = m1
     m2 = m1
     n2 = m1
     #partition = (m1*n2)//1
-    partition = 10
+    partition = 3000
 
     # config mode
     #method = 'addition'

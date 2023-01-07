@@ -93,7 +93,7 @@ class Boto3Function():
         return command_id
 
     def start_worker(self, target_instance_id, file_name, method, queue_url1, region_name1, queue_url2, region_name2, check_queue = None):
-        dict_name = 'DICT_NAME'
+        dict_name = 'START_CONFIG'
         dict_contents = {
             'file_name': file_name, 
             'method': method, 
@@ -104,7 +104,7 @@ class Boto3Function():
             'check_queue':check_queue
             }
         dict_string = ' '.join(['{} {}'.format(key, value) for key, value in dict_contents.items()])
-        commands = ['cd /home/ec2-user/github-cc && echo {}={} >> dict_file.txt'.format(dict_name, dict_string)]
+        commands = ['cd /home/ec2-user/github-cc && echo {}={} >> START_CONFIG.txt'.format(dict_name, dict_string)]
         command_id0 = self.execute_ssm_command(target_instance_id=target_instance_id, commands=commands, comment=f'dict for {file_name} to {target_instance_id}')
 
         commands = [f'cd /home/ec2-user/github-cc && sudo nohup python3 {file_name} &']
