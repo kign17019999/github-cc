@@ -59,9 +59,9 @@ def main():
         #ids[ii] = value[0]
         #status[ii] = value[1]
 
-        names[ii] = ii+1
-        ids[ii] = ii+2
-        status[ii] = ii+3
+        names.append(ii+1)
+        ids.append(ii+2)
+        status.append(ii+3)
 
         ii+=1
     print('-----------------------------------------------')
