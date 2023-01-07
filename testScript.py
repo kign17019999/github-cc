@@ -4,17 +4,25 @@ import result_log as rl
 from boto3function import Boto3Function
 import time
 
+names = ["","","","","","","",""]
+ids = ["","","","","","","",""]
+status = ["","","","","","","",""]
 
 import threading
 def print_message():
-    t = 10
+    names
+    t = 5
     while True:
         print(f"This message will be printed every {t} seconds")
+        for i in range(len(names)):
+            print(f'worker {names[i]} {ids[i]} {status[i]}')
         time.sleep(t)
 #thread = threading.Thread(target=print_message)
 #thread.start()
 
 def main():
+    global names, ids, status
+
     #******************************************************************************
 
     # design metrix and number of package
@@ -42,9 +50,20 @@ def main():
     b3f = Boto3Function(region_name1)
 
     inst_dict = b3f.ec2_status()
+    ii = 0
     print('-----------------------------------------------')
     for key, value in inst_dict.items():
         print(f'Instance name: {key}, Instance ID: {value[0]}, Running status: {value[1]}')
+        
+        #names[ii] = key
+        #ids[ii] = value[0]
+        #status[ii] = value[1]
+
+        names[ii] = ii+1
+        ids[ii] = ii+2
+        status[ii] = ii+3
+
+        ii+=1
     print('-----------------------------------------------')
 
     inst_worker_id = {
@@ -151,6 +170,7 @@ def main():
 
 
 if __name__ == '__main__':
+    
     thread = threading.Thread(target=print_message)
     thread.start()
     main()
