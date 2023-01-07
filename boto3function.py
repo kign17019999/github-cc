@@ -75,13 +75,13 @@ class Boto3Function():
 
         #commands = ['cd /home/ec2-user && sudo yum install vim git -y && sudo pip3 install numpy && sudo pip3 install boto3 && git clone https://github.com/kign17019999/github-cc.git']
         commands = ['cd /home/ec2-user && sudo yum install vim git -y && sudo pip3 install numpy && sudo pip3 install boto3']
-        command_id = self.execute_ssm_command(target_instance_id=target_instance_id, commands=commands, comment='initial setup instance')
+        command_id = self.execute_ssm_command(target_instance_id=target_instance_id, commands=commands, comment=f'initial setup instance to {target_instance_id}')
         
         return command_id
     
     def inst_init_cloneGit(self, target_instance_id, git_url):
         commands = [f'cd /home/ec2-user && git clone {git_url}']
-        command_id = self.execute_ssm_command(target_instance_id=target_instance_id, commands=commands, comment='clone git')
+        command_id = self.execute_ssm_command(target_instance_id=target_instance_id, commands=commands, comment=f'clone git to to {target_instance_id}')
         
         return command_id
 
@@ -120,17 +120,17 @@ class Boto3Function():
             }
         dict_string = ' '.join(['{} {}'.format(key, value) for key, value in dict_contents.items()])
         commands = ['cd /home/ec2-user/github-cc && echo {}={} >> dict_file.txt'.format(dict_name, dict_string)]
-        command_id0 = self.execute_ssm_command(target_instance_id=target_instance_id, commands=commands, comment=f'start {file_name}')
+        command_id0 = self.execute_ssm_command(target_instance_id=target_instance_id, commands=commands, comment=f'dict for {file_name} to {target_instance_id}')
 
         commands = [f'cd /home/ec2-user/github-cc && nohup python3 {file_name} &']
-        command_id1 = self.execute_ssm_command(target_instance_id=target_instance_id, commands=commands, comment=f'start {file_name}')
+        command_id1 = self.execute_ssm_command(target_instance_id=target_instance_id, commands=commands, comment=f'start {file_name} to {target_instance_id}')
         return command_id1
 
     def stop_worker(self, target_instance_id, file_name, method, queue_url1, region_name1, queue_url2, region_name2, check_queue = None):
         #commands = ['kill $(ps aux | grep {} {} {} {} {} {} {} | awk '"'"'{{print $2}}'"'"')'.format(file_name, method, queue_url1, region_name1, queue_url2, region_name2, check_queue)]
         commands = ['kill $(ps aux | grep {} | awk '"'"'{{print $2}}'"'"')'.format(file_name)]
         
-        command_id = self.execute_ssm_command(target_instance_id=target_instance_id, commands=commands, comment=f'stop {file_name}')
+        command_id = self.execute_ssm_command(target_instance_id=target_instance_id, commands=commands, comment=f'stop {file_name} to {target_instance_id}')
         
         return command_id
     
