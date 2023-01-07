@@ -66,7 +66,14 @@ def evaluate_queue(fileName, method, queue_url1, region_name1, queue_url2, regio
         for key, value in inst_dict.items():
             if value[1] != 'stopped' and value[1] != 'stopping':
                 if key not in always_on:
-                    status_off = b3f.ec2_stop(value[0])
+                    status1 = ""
+                    while status1 != 'yes':
+                        try:
+                            status_off = b3f.ec2_stop(value[0])
+                            status1 = 'yes'
+                        except:
+                            pass
+                    
     
     num_inQueue = b3f.sqs_check_queue(queue_url)
     inst_dict = b3f.ec2_status()
