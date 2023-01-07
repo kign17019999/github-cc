@@ -3,7 +3,7 @@ import time
 
 def evaluate_queue(fileName, method, queue_url1, region_name1, queue_url2, region_name2):
     
-    step_spin = 400
+    step_spin = 50
     git_url = 'https://github.com/kign17019999/github-cc.git'
     git_foldName = 'github-cc'
     queue_url = 'https://sqs.us-east-1.amazonaws.com/183243280383/queue_to_worker'
