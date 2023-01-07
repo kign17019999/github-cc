@@ -89,8 +89,8 @@ def main():
                     status0 = inst_dict[key][1]
             time.sleep(1)
 
-    for id in start_by_off:
-        status_off = b3f.ec2_stop(id)
+    #for id in start_by_off:
+    #    status_off = b3f.ec2_stop(id)
 
     if len(id_cowork) >0:
         b3f.inst_updateGit(
