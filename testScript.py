@@ -44,6 +44,7 @@ def main():
     print('-----------------------------------------------')
     for key, value in inst_dict.items():
         print(f'Instance name: {key}, Instance ID: {value[0]}, Running status: {value[1]}')
+        print(f'type of {value[0]}:{type(value[0])}')
     print('-----------------------------------------------')
 
     inst_worker_id = {
@@ -60,7 +61,7 @@ def main():
     #start_by_off = [inst_worker_id['3'], inst_worker_id['4'], inst_worker_id['5'], inst_worker_id['6'], inst_worker_id['7'], inst_worker_id['8']]
     start_by_off = []
     id_cowork = []
-    id_list = [inst_worker_id['2'], [inst_worker_id['3']]]
+    id_list = [inst_worker_id['2'], inst_worker_id['3']]
     #id_list = ['i-055336f9cd0657c5c']
     
     fileName = 'worker6.py'

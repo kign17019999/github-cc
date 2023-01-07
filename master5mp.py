@@ -1,5 +1,6 @@
 from sqsfunction import SQSFunction
 from matrixparallel_v2 import MatrixParallel
+import queue_delete_msg
 import numpy as np
 import time
 import multiprocessing
@@ -37,6 +38,12 @@ def master(method, queue_url1, region_name1, queue_url2, region_name2, partition
     print('* * * * * * * * *')
     print(__main__.__file__)
     print(f'acting as a master for {method}')
+
+    # delete everything inqueue befoer perform command
+    queue_delete_msg.delete_msg(queue_url1, region_name1)
+    print('finish')
+    queue_delete_msg.delete_msg(queue_url2, region_name2)
+    print('finish')
 
     # metrix operation
     mp = MatrixParallel()

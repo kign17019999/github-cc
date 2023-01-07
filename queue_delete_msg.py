@@ -16,7 +16,8 @@ def delete_msg(queue_url, region_name):
         message = sqs_function.receive_message()
 
         if message is not None:
-            print(f'Message received: {message}')
+            #print(f'Message received: {message}')
+            pass
         else:
             # Stop receiving messages if there are no more messages in the queue
             break
