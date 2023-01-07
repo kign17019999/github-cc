@@ -1,30 +1,30 @@
 import time
 
-start_time_1 = time.time()
-start_time_2 = time.time()
+def update_progress(progress, sleep_time=1):
+    """Displays or updates a console progress bar
+    
+    Accepts a float between 0 and 1. Any int will be converted to a float.
+    A value under 0 represents a 'halt'.
+    A value at 1 or bigger represents 100%
+    """
+    bar_length = 20
+    status = ""
+    if isinstance(progress, int):
+        progress = float(progress)
+    if not isinstance(progress, float):
+        progress = 0
+        status = "error: progress var must be float\r\n"
+    if progress < 0:
+        progress = 0
+        status = "Halt...\r\n"
+    if progress >= 1:
+        progress = 1
+        status = "Done...\r\n"
+    block = int(round(bar_length*progress))
+    text = "\rPercent: [{0}] {1}% {2}".format("#"*block + "-"*(bar_length-block), progress*100, status)
+    print(text, end="")
+    time.sleep(sleep_time)
 
-# Print two more advanced progress bars that update at different rates
-for i in range(100):
-    # Calculate the elapsed time for the first progress bar
-    elapsed_time_1 = time.time() - start_time_1
-
-    # Calculate the estimated time remaining for the first progress bar
-    time_remaining_1 = elapsed_time_1 / (i+1) * (100 - (i+1))
-
-    # Format the string for the first progress bar
-    progress_bar_1 = f"[{'#' * (i+1):<50}] {i+1}% (elapsed: {elapsed_time_1:.1f}s, remaining: {time_remaining_1:.1f}s)"
-
-    # Calculate the elapsed time for the second progress bar
-    elapsed_time_2 = time.time() - start_time_2
-
-    # Calculate the estimated time remaining for the second progress bar
-    time_remaining_2 = elapsed_time_2 / ((i+1) * 2) * (100 - ((i+1) * 2))
-
-    # Format the string for the second progress bar
-    progress_bar_2 = f"[{'#' * ((i+1) * 2):<50}] {(i+1) * 2}% (elapsed: {elapsed_time_2:.1f}s, remaining: {time_remaining_2:.1f}s)"
-
-    # Print the progress bars
-    print(f"{progress_bar_1}\n{progress_bar_2}", end="\r")
-
-    # Wait 0.1 seconds before updating the progress bars
-    time.sleep(0.1)
+# Example usage
+for i in range(101):
+    update_progress(i/100)
