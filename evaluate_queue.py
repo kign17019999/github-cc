@@ -26,16 +26,27 @@ def evaluate_queue(fileName, method, queue_url1, region_name1, queue_url2, regio
             if value[1] != 'running':
                 id_spin = value[0]
                 instance_name = key
-                status_on = b3f.ec2_start(id_spin)
+                while status1 != 'yes':
+                    try:
+                        status_on = b3f.ec2_start(id_spin)
+                        status1 = 'yes'
+                    except:
+                        pass
                 while True:
                     inst_dict = b3f.ec2_status()
                     if inst_dict[instance_name][1] == 'running':
                         break
-                b3f.inst_updateGit(
-                    target_instance_id = id_spin, 
-                    git_url = git_url, 
-                    git_foldName = git_foldName
-                    )
+                status1 = ""
+                while status1 != 'yes':
+                    try:
+                        b3f.inst_updateGit(
+                            target_instance_id = id_spin, 
+                            git_url = git_url, 
+                            git_foldName = git_foldName
+                            )
+                        status1 = 'yes'
+                    except:
+                        pass
                 b3f.inst_init_setup(id_spin)
                 b3f.start_worker(
                     target_instance_id = id_spin, 
