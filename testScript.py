@@ -137,8 +137,9 @@ def main():
                 status1 = 'yes'
             except:
                 pass
-
+        time.sleep(1)
         b3f.inst_init_setup(id_cowork[0])
+        time.sleep(1)
         b3f.start_worker(
             target_instance_id = id_cowork[0], 
             file_name = fileName, 
@@ -149,7 +150,7 @@ def main():
             region_name2 = region_name2, 
             check_queue = True
             )
-        time.sleep(1)
+
     
     for id in id_list:
         status1 = ""
@@ -167,6 +168,7 @@ def main():
         b3f.inst_init_setup(id)
 
     for id in id_list:
+        time.sleep(1)
         b3f.start_worker(
             target_instance_id = id, 
             file_name = fileName, 
