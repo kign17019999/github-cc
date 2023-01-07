@@ -6,9 +6,10 @@ import time
 
 import threading
 def print_message():
+    t = 10
     while True:
-        print("This message will be printed every 60 seconds")
-        time.sleep(10)
+        print(f"This message will be printed every {t} seconds")
+        time.sleep(t)
 thread = threading.Thread(target=print_message)
 thread.start()
 
