@@ -9,7 +9,7 @@ should_stop = 0
 import threading
 
 def print_message():
-    t = 5
+    t = 10
     while should_stop == 0:
         b3f = Boto3Function('us-east-1')
         inst_dict = b3f.ec2_status()
@@ -18,12 +18,8 @@ def print_message():
         print('-----------------------------------------------')
         for key, value in inst_dict.items():
             #print(f'Instance name: {key}, Instance ID: {value[0]}, Running status: {value[1]}')
-            names.append(key)
-            status.append(value[1])
-        new_names = [s + ' ' * (10 - len(s)) for s in names]
-        new_status = [s + ' ' * (10 - len(s)) for s in status]
-        print(new_names)
-        print(new_status)
+            if 'Worker' in key:
+                print(f'Instance name: {key}, Running status: {value[1]}')
         print('-----------------------------------------------')
         time.sleep(t)
     
