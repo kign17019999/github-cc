@@ -4,9 +4,9 @@ import result_log as rl
 from boto3function import Boto3Function
 import time
 
-names = ["","","","","","","",""]
-ids = ["","","","","","","",""]
-status = ["","","","","","","",""]
+names = []
+ids = []
+status = []
 
 import threading
 def print_message():
@@ -46,7 +46,7 @@ def main():
 
     #******************************************************************************
     #exec(open("ssm_start_w3a.py").read())
-
+    time.sleep(2)
     b3f = Boto3Function(region_name1)
 
     inst_dict = b3f.ec2_status()
