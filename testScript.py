@@ -10,7 +10,7 @@ should_stop = 0
 import threading
 
 def print_message():
-    t = 10
+    t = 15
     while should_stop == 0:
         b3f = Boto3Function('us-east-1')
         inst_dict = b3f.ec2_status()
