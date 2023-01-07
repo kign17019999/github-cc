@@ -35,20 +35,22 @@ HOW TO USE:
 '''
 
 def master(method, queue_url1, region_name1, queue_url2, region_name2, partition=10, m1=10, n1=10, m2=10, n2=10, randF=0, randT=10, time_before_print_process=5, time_before_resend=15, parallel=False):
-    print('* * * * * * * * *')
+    print('* * * * * start * * * * *')
     print(__main__.__file__)
-    print(f'acting as a master for {method}')
+    print(f'Starting Distributed Cloud System to perform a matrix {method} ...')
 
     # delete everything inqueue befoer perform command
-    queue_delete_msg.delete_msg(queue_url1, region_name1)
-    print('finish')
-    queue_delete_msg.delete_msg(queue_url2, region_name2)
-    print('finish')
+    #queue_delete_msg.delete_msg(queue_url1, region_name1)
+    #print('    Finish')
+    #queue_delete_msg.delete_msg(queue_url2, region_name2)
+    #print('    Finish')
 
     # metrix operation
+    start_gen_mat = time.time()
     mp = MatrixParallel()
     mat1 = mp.gen_matrix(m1,n1,randF,randT)
     mat2 = mp.gen_matrix(m2,n2,randF,randT)
+    time_for_gen_mat = time.time() - start_gen_mat
 
     # timing overall process by distributed system
     start_time_all = time.time()
@@ -67,10 +69,10 @@ def master(method, queue_url1, region_name1, queue_url2, region_name2, partition
         # create a pool of worker processor
         pool = multiprocessing.Pool(2)
         
-        print('(Parallel CPU core) start sending..')
+        print('start sending... (using Parallel CPU core at Master)')
         temp_send = pool.apply_async(send_msg, (method, m1, n1, m2, n2, partition, time_before_print_process, pack_of_matrixs, queue_url1, region_name1))
 
-        print('(Parallel CPU core) start getting result & combine...')
+        print('start getting result & combine... (using Parallel CPU core at Master)')
         temp_get = pool.apply_async(get_results,(method, mp, dict_of_matrixs, time_before_resend, time_before_print_process, partition, queue_url1, region_name1, queue_url2, region_name2))
     
         # waiting for finish all worker processor and join
@@ -93,21 +95,24 @@ def master(method, queue_url1, region_name1, queue_url2, region_name2, partition
     
     # stoptiming overall process by local system
     stop_time_local = time.time()
-    
+    print('-----------------------------------------------')
     print('checking result:')
     print(f'{final_result == result_with_local}')
-    
+    print('-----------------------------------------------')
     print('timing...')
     parallel_word = ""
     if parallel == True: parallel_word = "(Parallel CPU core) "
     print('-----------------------------------------------')
-    print(f'>> {parallel_word}total time decompose       : {time_for_decompose} s')
-    print(f'>> {parallel_word}total time sending message : {time_for_sending} s')
-    print(f'>> {parallel_word}total time getting result  : {time_for_getting_result} s (include resending time)')
+    print(f'>> total time gen 2 matrics     : {time_for_gen_mat} s')
     print('-----------------------------------------------')
-    print(f'>> {parallel_word}total time distibuted system    : {stop_time_all-start_time_all} s')
-    print(f'>> total time local system         : {stop_time_local-start_time_local} s')
-    print('* * * * * * * * *')
+    print(f'>> total time decompose         : {time_for_decompose} s')
+    print(f'>> total time sending message   : {time_for_sending} s {parallel_word}')
+    print(f'>> total time getting result    : {time_for_getting_result} s (include resending time) {parallel_word}')
+    print('-----------------------------------------------')
+    print(f'>> total time distibuted system : {stop_time_all-start_time_all} s {parallel_word}')
+    print(f'>> total time local system      : {stop_time_local-start_time_local} s')
+    print('-----------------------------------------------')
+    print('* * * * * end * * * * *')
 
     return_data = {
         'method': method,
@@ -115,6 +120,7 @@ def master(method, queue_url1, region_name1, queue_url2, region_name2, partition
         'mat2_size': f'{m2}x{n2}',
         'num_packages': partition,
         'master_multiprocess': parallel,
+        'total_time_gen_mat': time_for_gen_mat,
         'total_time_local': stop_time_local-start_time_local,
         'total_time_dist': stop_time_all-start_time_all,
         'time_decompose': time_for_decompose,
@@ -145,11 +151,9 @@ def decompose_mat(method, mp, mat1, mat2, partition, time_before_print_process):
     if method == 'addition':
         # decompose and priting
         pack_of_matrixs, dict_of_matrixs = mp.decompose_for_addition(mat1, mat2, partition, time_before_print_process)
-        print(f'finishing decompose into {mp.decomp_count_add}/{partition} parition')
     elif method == 'multiplication':
         # decompose and priting
         pack_of_matrixs, dict_of_matrixs = mp.decompose_for_multiplication(mat1, mat2, partition, time_before_print_process)
-        print(f'finishing decompose into {mp.decomp_count_mul}/{partition} parition')
     
     stop_time_for_decompose= time.time()
 
@@ -225,10 +229,10 @@ def send_msg(method, m1, n1, m2, n2, partition, time_before_print_process, pack_
         # checking the time before print progress
         if time.time()-start_time > time_before_print_process:
             start_time = time.time()
-            print(f'    trying to sending...{i}/{partition} ')
+            print(f'    trying to send...{i}/{partition} pakages')
     
     stop_time_for_sending = time.time()
-    print(f'finishing sending...{partition}/{partition} ')
+    print(f'    finishing sending...{partition}/{partition} pakages')
 
     # summary sending time
     time_for_sending = stop_time_for_sending - start_time_for_sending
@@ -270,7 +274,10 @@ def get_results(method, mp, dict_of_matrixs, time_before_resend, time_before_pri
     
     # setting the couting number for priting the progress
     count_get = 0
+    count_get_result = 0
     
+    want_result = len(dict_of_matrixs)
+
     # looping for getting result
     while True:
         # read message from SQS Queue
@@ -289,6 +296,7 @@ def get_results(method, mp, dict_of_matrixs, time_before_resend, time_before_pri
                     elif method == 'multiplication':
                         status_combine = mp.combine_multiplication(one_result)
                     del dict_of_matrixs[ikey]
+                    count_get_result +=1
             # update counting progress
             count_get+=1
 
@@ -296,7 +304,7 @@ def get_results(method, mp, dict_of_matrixs, time_before_resend, time_before_pri
             no_msg_time = time.time()
         # check no msg time before resending
         if time.time()-no_msg_time > time_before_resend:
-            print(f'no message for {time_before_resend}s, try to check the black result')
+            print(f'    !! no message for {time_before_resend}s, try to check the blank result in Dict_Matrix')
             # timing for update progress of resending with counting too
             start_time_resend = time.time()            
             count_resend = 0
@@ -308,8 +316,8 @@ def get_results(method, mp, dict_of_matrixs, time_before_resend, time_before_pri
                 count_resend+=1
                 if time.time()-start_time_resend > time_before_print_process:
                     start_time_resend = time.time()
-                    print(f'        trying to resending...{count_resend}/{count_num_for_resend} ')
-            print(f'        finish resending...{count_resend}/{count_num_for_resend} ')
+                    print(f'        trying to resending...{count_resend}/{count_num_for_resend} sub-pair')
+            print(f'        finish resending...{count_resend}/{count_num_for_resend} sub-pair')
             if count_resend > 0:
                 # timing before resending process (reset after finish previous resend)
                 no_msg_time = time.time()
@@ -319,14 +327,14 @@ def get_results(method, mp, dict_of_matrixs, time_before_resend, time_before_pri
         # check time before update the progress
         if time.time()-start_time > time_before_print_process:
             start_time = time.time()
-            print(f'    trying to get results...{count_get}/{partition} ')
+            print(f'    trying to get results...{count_get}/{partition} packages | {count_get_result}/{want_result} sub-result')
 
         # check if all of get equal to number of package >> break the loop (because it is done)
-        if count_get == partition:
+        if len(dict_of_matrixs) == 0:
             break
     
     stop_time_getting_result = time.time()
-    print(f'finish getting all result & combine...{count_get}/{partition}') 
+    print(f'    finish getting all result & combining...{count_get}/{partition} packages | {count_get_result}/{want_result} sub-result') 
 
     time_for_getting_result = stop_time_getting_result - start_time_getting_result
 

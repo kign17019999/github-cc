@@ -52,11 +52,12 @@ def main():
     queue_url2 = 'https://sqs.us-east-1.amazonaws.com/183243280383/queue_to_master'
     region_name2 = 'us-east-1' 
 
+    print('-----------------------------------------------')
     # delete everything inqueue befoer perform command
     queue_delete_msg.delete_msg(queue_url1, region_name1)
-    print('finish')
+    print('    finish')
     queue_delete_msg.delete_msg(queue_url2, region_name2)
-    print('finish')
+    print('    finish')
 
     #******************************************************************************
     time.sleep(1)
@@ -117,7 +118,7 @@ def main():
                 if inst_dict[key][0] == id:
                     print(f'waiting {id} : {inst_dict[key][1]}')
                     status0 = inst_dict[key][1]
-            time.sleep(1)
+
 
     for id in start_by_off:
         status_off = b3f.ec2_stop(id)
