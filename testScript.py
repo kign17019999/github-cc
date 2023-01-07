@@ -68,7 +68,7 @@ def main():
     always_on = [inst_worker_id['1'], inst_worker_id['2'], inst_worker_id['3']]
     start_by_off = [inst_worker_id['4'], inst_worker_id['5'], inst_worker_id['6'], inst_worker_id['7'], inst_worker_id['8']]
     #start_by_off = []
-    id_cowork = []
+    id_cowork = [inst_worker_id['1']]
     id_list = [inst_worker_id['2'], inst_worker_id['3']]
     #id_list = ['i-055336f9cd0657c5c']
     
@@ -76,6 +76,18 @@ def main():
     git_url = 'https://github.com/kign17019999/github-cc.git'
     git_foldName = 'github-cc'
     
+
+    for id in always_on:
+        status_on = b3f.ec2_start(id)
+        inst_dict = b3f.ec2_status()   
+        status0 = ""
+        while status0 != 'running':
+            for key, value in inst_dict.items():
+                if inst_dict[key][0] == id:
+                    print(f'waiting {id} : {inst_dict[key][1]}')
+                    status0 = inst_dict[key][1]
+            time.sleep(1)
+
     for id in start_by_off:
         status_off = b3f.ec2_stop(id)
 
