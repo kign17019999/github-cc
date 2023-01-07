@@ -7,7 +7,7 @@ def evaluate_queue(fileName, method, queue_url1, region_name1, queue_url2, regio
     git_url = 'https://github.com/kign17019999/github-cc.git'
     git_foldName = 'github-cc'
     queue_url = 'https://sqs.us-east-1.amazonaws.com/183243280383/queue_to_worker'
-    always_on = ['CC_Master', 'CC_Worker_01', 'CC_Worker_02']
+    always_on = ['CC_Master', 'CC_Worker_01', 'CC_Worker_02', 'CC_Worker_03']
 
     b3f = Boto3Function(region_name1)
     # just check worker queue
