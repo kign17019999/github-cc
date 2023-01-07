@@ -79,7 +79,13 @@ def main():
     
 
     for id in always_on:
-        status_on = b3f.ec2_start(id)
+        status1 = ""
+        while status1 != 'yes':
+            try:
+                status_on = b3f.ec2_start(id)
+                status1 = 'yes'
+            except:
+                pass
         status0 = ""
         while status0 != 'running':
             inst_dict = b3f.ec2_status()  
