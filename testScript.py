@@ -4,14 +4,15 @@ import result_log as rl
 from boto3function import Boto3Function
 import time
 
+
 import threading
 def print_message():
     t = 10
     while True:
         print(f"This message will be printed every {t} seconds")
         time.sleep(t)
-thread = threading.Thread(target=print_message)
-thread.start()
+#thread = threading.Thread(target=print_message)
+#thread.start()
 
 def main():
     #******************************************************************************
@@ -44,7 +45,6 @@ def main():
     print('-----------------------------------------------')
     for key, value in inst_dict.items():
         print(f'Instance name: {key}, Instance ID: {value[0]}, Running status: {value[1]}')
-        print(f'type of {value[0]}:{type(value[0])}')
     print('-----------------------------------------------')
 
     inst_worker_id = {
@@ -151,4 +151,6 @@ def main():
 
 
 if __name__ == '__main__':
+    thread = threading.Thread(target=print_message)
+    thread.start()
     main()

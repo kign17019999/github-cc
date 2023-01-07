@@ -1,12 +1,7 @@
 import time
+import multiprocessing
 
 def update_progress(progress, sleep_time=1):
-    """Displays or updates a console progress bar
-    
-    Accepts a float between 0 and 1. Any int will be converted to a float.
-    A value under 0 represents a 'halt'.
-    A value at 1 or bigger represents 100%
-    """
     bar_length = 20
     status = ""
     if isinstance(progress, int):
@@ -25,6 +20,9 @@ def update_progress(progress, sleep_time=1):
     print(text, end="")
     time.sleep(sleep_time)
 
-# Example usage
-for i in range(101):
-    update_progress(i/100)
+
+if __name__ == '__main__':
+    #pool = multiprocessing.Pool(2)
+    for i in range(101):
+        update_progress(i/100)
+        #temp_send = pool.apply_async(update_progress,(i/100))
