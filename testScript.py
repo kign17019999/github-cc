@@ -4,6 +4,14 @@ import result_log as rl
 from boto3function import Boto3Function
 import time
 
+import threading
+def print_message():
+    while True:
+        print("This message will be printed every 60 seconds")
+        time.sleep(10)
+thread = threading.Thread(target=print_message)
+thread.start()
+
 def main():
     #******************************************************************************
 
@@ -17,7 +25,7 @@ def main():
     # config mode
     method = 'addition'
     #method = 'multiplication'
-    parallel = False
+    parallel = True
 
 
     # config URL
@@ -48,9 +56,9 @@ def main():
         '8':'i-068cd621413f03c08'
         }
     always_on = [inst_worker_id['1'], inst_worker_id['2']]
-    start_by_off = [inst_worker_id['3'], inst_worker_id['4'], inst_worker_id['5'], inst_worker_id['6'], inst_worker_id['7'], inst_worker_id['8']]
+    #start_by_off = [inst_worker_id['3'], inst_worker_id['4'], inst_worker_id['5'], inst_worker_id['6'], inst_worker_id['7'], inst_worker_id['8']]
     id_cowork = []
-    id_list = [inst_worker_id['2']]
+    id_list = [inst_worker_id['2'], [inst_worker_id['3']]]
     #id_list = ['i-055336f9cd0657c5c']
     
     fileName = 'worker6.py'

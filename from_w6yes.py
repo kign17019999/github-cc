@@ -12,10 +12,10 @@ def worker(method, queue_url1, region_name1, queue_url2, region_name2, check_que
     #print(f'check_queue = {check_queue}')
     sqs_function1 = SQSFunction(queue_url1, region_name1)
     sqs_function2 = SQSFunction(queue_url2, region_name2)
-    
+
     # metrix operation
     mp = MatrixParallel()
-    
+
     print(f'acting as a {method} worker')
     print('start receving & processing & send to master_queue...')
     count = 0
@@ -38,8 +38,7 @@ def worker(method, queue_url1, region_name1, queue_url2, region_name2, check_que
             if time.time() - start_time > time_before_evaluate_queue:
                 evaluate_queue.evaluate_queue(str(__main__.__file__), method, queue_url1, region_name1, queue_url2, region_name2)
                 start_time = time.time()
-        time.sleep(0.5)
-
+                if __name__ == '__main__':
 
 if __name__ == '__main__':
     
