@@ -99,11 +99,18 @@ def main():
     #    status_off = b3f.ec2_stop(id)
 
     if len(id_cowork) >0:
-        b3f.inst_updateGit(
-            target_instance_id = id_cowork[0], 
-            git_url = git_url, 
-            git_foldName = git_foldName
-            )
+        status1 = ""
+        while status1 != 'yes':
+            try:
+                b3f.inst_updateGit(
+                    target_instance_id = id_cowork[0], 
+                    git_url = git_url, 
+                    git_foldName = git_foldName
+                    )
+                status1 = 'yes'
+            except:
+                pass
+
         b3f.inst_init_setup(id_cowork[0])
         b3f.start_worker(
             target_instance_id = id_cowork[0], 
@@ -117,11 +124,18 @@ def main():
             )
     
     for id in id_list:
-        b3f.inst_updateGit(
-            target_instance_id = id, 
-            git_url = git_url, 
-            git_foldName = git_foldName
-            )
+        status1 = ""
+        while status1 != 'yes':
+            try:
+                b3f.inst_updateGit(
+                    target_instance_id = id, 
+                    git_url = git_url, 
+                    git_foldName = git_foldName
+                    )
+                status1 = 'yes'
+            except:
+                pass
+
         b3f.inst_init_setup(id)
 
     for id in id_list:
