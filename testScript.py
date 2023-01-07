@@ -68,7 +68,7 @@ def main():
     always_on = [inst_worker_id['1'], inst_worker_id['2'], inst_worker_id['3']]
     start_by_off = [inst_worker_id['4'], inst_worker_id['5'], inst_worker_id['6'], inst_worker_id['7'], inst_worker_id['8']]
     #start_by_off = []
-    id_cowork = [inst_worker_id['2']]
+    id_cowork = [inst_worker_id['1']]
     id_list = [inst_worker_id['2'], inst_worker_id['3']]
     #id_list = ['i-055336f9cd0657c5c']
     
