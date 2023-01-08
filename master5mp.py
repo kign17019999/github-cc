@@ -323,25 +323,28 @@ def get_results(method, mp, dict_of_matrixs, time_before_resend, time_before_pri
             no_msg_time = time.time()
         # check no msg time before resending
         if time.time()-no_msg_time > time_before_resend:
-            print(f'    !! no message for {time_before_resend}s, try to check the blank result in Dict_Matrix')
-            # timing for update progress of resending with counting too
-            start_time_resend = time.time()            
-            count_resend = 0
-            count_num_for_resend = len(dict_of_matrixs)
-            for key, value in dict_of_matrixs.items():
-                one_pack_of_matrixs = value
-                #print(one_pack_of_matrixs)
-                message_id = sqs_function1.send_message(message = [one_pack_of_matrixs])
-                count_resend+=1
-                if time.time()-start_time_resend > time_before_print_process:
-                    start_time_resend = time.time()
-                    print(f'        (RESENT) trying to resending...{count_resend}/{count_num_for_resend} sub-pair')
-            print(f'        (RESENT) finish resending...{count_resend}/{count_num_for_resend} sub-pair')
-            if count_resend > 0:
-                # timing before resending process (reset after finish previous resend)
-                no_msg_time = time.time()
-            else:
-                break
+            inst_dict = b3f.ec2_status()
+            num_inQueue_worker = b3f.sqs_check_queue(queue_url1)
+            if num_inQueue_worker == 0:
+                print(f'    !! no message for {time_before_resend}s and No Msg in Queue, try to check the blank result in Dict_Matrix')
+                # timing for update progress of resending with counting too
+                start_time_resend = time.time()            
+                count_resend = 0
+                count_num_for_resend = len(dict_of_matrixs)
+                for key, value in dict_of_matrixs.items():
+                    one_pack_of_matrixs = value
+                    #print(one_pack_of_matrixs)
+                    message_id = sqs_function1.send_message(message = [one_pack_of_matrixs])
+                    count_resend+=1
+                    if time.time()-start_time_resend > time_before_print_process:
+                        start_time_resend = time.time()
+                        print(f'        (RESENT) trying to resending...{count_resend}/{count_num_for_resend} sub-pair')
+                print(f'        (RESENT) finish resending...{count_resend}/{count_num_for_resend} sub-pair')
+                if count_resend > 0:
+                    # timing before resending process (reset after finish previous resend)
+                    no_msg_time = time.time()
+                else:
+                    break
 
         # check time before update the progress
         if time.time()-start_time > time_before_print_process:
