@@ -37,7 +37,7 @@ HOW TO USE:
 
 def master(method, queue_url1, region_name1, queue_url2, region_name2, partition=10, m1=10, n1=10, m2=10, n2=10, randF=0, randT=10, time_before_print_process=5, time_before_resend=15, parallel=False):
     print('* * * * * start * * * * *')
-    print(f'run fom :{__main__.__file__}')
+    print(f'run from file:{__main__.__file__}')
     print(f'Starting Distributed Cloud System to perform a matrix {method} ...')
 
     # delete everything inqueue befoer perform command
@@ -200,7 +200,7 @@ def send_msg(method, m1, n1, m2, n2, partition, time_before_print_process, pack_
     elif method == 'multiplication':
         num_operation = m1*n2
 
-    if m1 >= partition:
+    if num_operation >= partition:
         min_msg_each_send = num_operation//partition
         max_msg_each_send = min_msg_each_send+1
         num_send_with_max = num_operation%partition

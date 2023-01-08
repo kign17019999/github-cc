@@ -106,7 +106,7 @@ class Boto3Function():
             'always_on':always_on
             }
         dict_string = ' '.join(['{} {}'.format(key, value) for key, value in dict_contents.items()])
-        commands = ['cd /home/ec2-user/github-cc && echo {}={} >> START_CONFIG.txt'.format(dict_name, dict_string)]
+        commands = ['cd /home/ec2-user/github-cc && echo {}={} > START_CONFIG.txt'.format(dict_name, dict_string)]
         command_id0 = self.execute_ssm_command(target_instance_id=target_instance_id, commands=commands, comment=f'dict for {file_name} to {target_instance_id}')
 
         commands = [f'cd /home/ec2-user/github-cc && sudo nohup python3 {file_name} &']
