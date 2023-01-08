@@ -1,4 +1,4 @@
-import application_main
+import application_main_for_test_script
 import result_log as result_log
 
 def main():
@@ -6,7 +6,7 @@ def main():
     for m1 in range(1000, 10000+1, 500):
         for parition in range(1000, 10000+1, 1000):
             try:
-                application_main.function_for_test(method, m1, m1, m1, m1, parition)
+                application_main_for_test_script.function_for_test(method, m1, m1, m1, m1, parition)
             except Exception as e:
                 print('##################')
                 print(e)
