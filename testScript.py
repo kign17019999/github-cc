@@ -290,6 +290,13 @@ def print_instance_status():
 
 if __name__ == '__main__':
     import_config()
-    thread = threading.Thread(target=print_instance_status)
-    thread.start()
+    b3f = Boto3Function('us-east-1')
+    inst_dict = b3f.ec2_status()
+    print('----------------------------------------------------------------------------------------')
+    for key, value in inst_dict.items():
+        if 'Worker' in key:
+            print(f'Instance name: {key}, Instance ID: {value[0]}, Running status: {value[1]}')
+    print('----------------------------------------------------------------------------------------')
+    #thread = threading.Thread(target=print_instance_status)
+    #thread.start()
     main()

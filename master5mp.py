@@ -37,7 +37,7 @@ HOW TO USE:
 
 def master(method, queue_url1, region_name1, queue_url2, region_name2, partition=10, m1=10, n1=10, m2=10, n2=10, randF=0, randT=10, time_before_print_process=5, time_before_resend=15, parallel=False):
     print('* * * * * start * * * * *')
-    print(__main__.__file__)
+    print(f'run fom :{__main__.__file__}')
     print(f'Starting Distributed Cloud System to perform a matrix {method} ...')
 
     # delete everything inqueue befoer perform command
@@ -273,6 +273,7 @@ def get_results(method, mp, dict_of_matrixs, time_before_resend, time_before_pri
 
     # timing be priting the progress
     start_time = time.time()
+    start_time_progress = time.time()
 
     # timing before resending process
     no_msg_time = time.time()
@@ -345,13 +346,20 @@ def get_results(method, mp, dict_of_matrixs, time_before_resend, time_before_pri
             for key, value in inst_dict.items():
                 if 'Worker' in key and value[1] == 'running':
                     num_running_instance +=1
-            num_inQueue_master = b3f.sqs_check_queue(queue_url1)
-            num_inQueue_worker = b3f.sqs_check_queue(queue_url2)
+            num_inQueue_worker = b3f.sqs_check_queue(queue_url1)
+            num_inQueue_master = b3f.sqs_check_queue(queue_url2)
 
-            log_msg_in_queue_worker.append(num_inQueue_master[1])
-            log_msg_in_queue_master.append(num_inQueue_worker[1])
+            log_msg_in_queue_worker.append(num_inQueue_worker[1])
+            log_msg_in_queue_master.append(num_inQueue_master[1])
             log_num_instance.append(num_running_instance)
             log_time.append(start_time)
+
+            if time.time() - start_time_progress > time_before_resend:
+                print(f'* running workers   = {num_running_instance} instances')
+                print(f'* msg to worker     = {num_inQueue_worker} message')
+                print(f'* msg to master     = {num_inQueue_master} message')
+                start_time_progress = time.time()
+                
 
         # check if all of get equal to number of package >> break the loop (because it is done)
         if len(dict_of_matrixs) == 0:
