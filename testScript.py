@@ -32,16 +32,22 @@ def main():
     queue_delete_msg.delete_msg(queue_url2, region_name2)
     print('    finish')
 
+    print('stop all spare_worker...')
     for id in spare_workerid:
+        print(f'id {id} ...')
         TE_stopEC2(id)
 
+    print('start and run special worker...')
     if len(special_workerid) >0:
         for id in special_workerid:
+            print(f'id {id} ...')
             TE_stopW(id)
             TE_startEC2(id)
             TE_startW(id, method, True)
     
+    print('start and run normal worker...')
     for id in normal_workerid:
+        print(f'id {id} ...')
         TE_stopW(id)
         TE_startEC2(id)
         TE_startW(id, method, None)
