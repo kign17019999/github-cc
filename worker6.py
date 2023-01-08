@@ -33,7 +33,7 @@ def worker(method, queue_url1, region_name1, queue_url2, region_name2, check_que
             count+=1
             print(f'    {count}: Done process & Sent result with msg_id: {message_id}')
         if check_queue == str(True):
-            if time.time() - start_time > time_for_evaluate:
+            if time.time() - start_time > int(time_for_evaluate):
                 evaluate_queue.evaluate_queue(str(__main__.__file__), method, queue_url1, region_name1, queue_url2, region_name2)
                 start_time = time.time()
         #time.sleep(0.5)
