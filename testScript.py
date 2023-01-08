@@ -32,7 +32,6 @@ def main():
     queue_delete_msg.delete_msg(queue_url2, region_name2)
     print('    finish')
 
-    #******************************************************************************  
     for id in spare_workerid:
         TE_stopEC2(id)
 
@@ -247,6 +246,10 @@ def import_config():
     special_workerid = params['special_workerid']
     normal_workerid = params['normal_workerid']
     always_on = params['always_on']
+
+    print(f'spare_workerid  : {spare_workerid}')
+    print(f'special_workerid: {special_workerid}')
+    print(f'normal_workerid : {normal_workerid}')
 
 def print_instance_status():
     while stop_print_instance_status == 0:
