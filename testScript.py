@@ -50,7 +50,7 @@ def main():
         TE_startW(id, method, None)
 
     stop_print_instance_status = 1
-    
+
     result = m5.master(
         method = method,
         queue_url1 = queue_url1, 
@@ -262,6 +262,7 @@ def import_config():
 
 def print_instance_status():
     b3f = Boto3Function('us-east-1')
+    inst_dict = b3f.ec2_status()
     print('----------------------------------------------------------------------------------------')
     for key, value in inst_dict.items():
         if 'Worker' in key:
