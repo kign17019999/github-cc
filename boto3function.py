@@ -72,8 +72,6 @@ class Boto3Function():
         return response['Command']['CommandId']
 
     def inst_init_setup(self, target_instance_id):
-
-        #commands = ['cd /home/ec2-user && sudo yum install vim git -y && sudo pip3 install numpy && sudo pip3 install boto3 && git clone https://github.com/kign17019999/github-cc.git']
         commands = ['cd /home/ec2-user && sudo yum install vim git -y && sudo pip3 install numpy && sudo pip3 install boto3']
         command_id = self.execute_ssm_command(target_instance_id=target_instance_id, commands=commands, comment=f'initial setup instance to {target_instance_id}')
         
@@ -86,13 +84,12 @@ class Boto3Function():
         return command_id
 
     def inst_updateGit(self, target_instance_id, git_url, git_foldName):
-        #commands = [f'cd /home/ec2-user/{git_foldName} && git reset --hard HEAD && git pull {git_url}']
         commands = [f'cd /home/ec2-user/ && sudo rm -r github-cc', f'cd /home/ec2-user && git clone {git_url}']
         command_id = self.execute_ssm_command(target_instance_id=target_instance_id, commands=commands, comment='update git')
         
         return command_id
 
-    def start_worker(self, target_instance_id, file_name, method, queue_url1, region_name1, queue_url2, region_name2, check_queue = None):
+    def start_worker(self, target_instance_id, file_name, method, queue_url1, region_name1, queue_url2, region_name2, check_queue = None, time_for_evaluate = 10, step_spin=100, git_url='https://github.com/kign17019999/github-cc.git', git_foldName='github-cc', always_on='CC_MasterCC_Worker_01CC_Worker_02CC_Worker_03'):
         dict_name = 'START_CONFIG'
         dict_contents = {
             'file_name': file_name, 
@@ -101,7 +98,12 @@ class Boto3Function():
             'region_name1':region_name1,
             'queue_url2':queue_url2,
             'region_name2':region_name2,
-            'check_queue':check_queue
+            'check_queue':check_queue,
+            'time_for_evaluate': time_for_evaluate,
+            'step_spin': step_spin,
+            'git_url': git_url,
+            'git_foldName': git_foldName,
+            'always_on':always_on
             }
         dict_string = ' '.join(['{} {}'.format(key, value) for key, value in dict_contents.items()])
         commands = ['cd /home/ec2-user/github-cc && echo {}={} >> START_CONFIG.txt'.format(dict_name, dict_string)]
@@ -111,8 +113,7 @@ class Boto3Function():
         command_id1 = self.execute_ssm_command(target_instance_id=target_instance_id, commands=commands, comment=f'start {file_name} to {target_instance_id}')
         return command_id1
 
-    def stop_worker(self, target_instance_id, file_name, method, queue_url1, region_name1, queue_url2, region_name2, check_queue = None):
-        #commands = ['kill $(ps aux | grep {} {} {} {} {} {} {} | awk '"'"'{{print $2}}'"'"')'.format(file_name, method, queue_url1, region_name1, queue_url2, region_name2, check_queue)]
+    def stop_worker(self, target_instance_id, file_name):
         commands = ['sudo kill $(ps aux | grep {} | awk '"'"'{{print $2}}'"'"')'.format(file_name)]
         
         command_id = self.execute_ssm_command(target_instance_id=target_instance_id, commands=commands, comment=f'stop {file_name} to {target_instance_id}')

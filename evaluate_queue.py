@@ -2,16 +2,25 @@ from boto3function import Boto3Function
 import time
 
 def evaluate_queue(fileName, method, queue_url1, region_name1, queue_url2, region_name2):
-    
-    step_spin = 100
-    git_url = 'https://github.com/kign17019999/github-cc.git'
-    git_foldName = 'github-cc'
-    queue_url = 'https://sqs.us-east-1.amazonaws.com/183243280383/queue_to_worker'
-    always_on = ['CC_Master', 'CC_Worker_01', 'CC_Worker_02', 'CC_Worker_03']
+    with open('START_CONFIG.txt', 'r') as f:
+        lines = f.readlines()
+    line = lines[0]
+    data = line.split('=')
+    keys_and_values = data[1].split(' ')
+    result_dict = {}
+    for i in range(0, len(keys_and_values), 2):
+        result_dict[keys_and_values[i]] = keys_and_values[i+1]
+
+    step_spin = result_dict['step_spin'].rstrip()
+    time_for_evaluate = result_dict['time_for_evaluate'].rstrip()
+
+    git_url = result_dict['git_url'].rstrip()
+    git_foldName = result_dict['git_foldName'].rstrip()
+    always_on = result_dict['always_on'].rstrip()
 
     b3f = Boto3Function(region_name1)
     # just check worker queue
-    num_inQueue = b3f.sqs_check_queue(queue_url)
+    num_inQueue = b3f.sqs_check_queue(queue_url1)
     inst_dict = b3f.ec2_status()
     print('-----------------------------------------------')
     print('before evaluate queue, the status is followings:')
@@ -57,7 +66,12 @@ def evaluate_queue(fileName, method, queue_url1, region_name1, queue_url2, regio
                     region_name1 = region_name1, 
                     queue_url2 = queue_url2, 
                     region_name2 = region_name2, 
-                    check_queue = None
+                    check_queue = None,
+                    time_for_evaluate = time_for_evaluate,
+                    step_spin= step_spin,
+                    git_url= git_url,
+                    git_foldName= git_foldName,
+                    always_on= always_on
                     )
                 
                 break
@@ -75,7 +89,7 @@ def evaluate_queue(fileName, method, queue_url1, region_name1, queue_url2, regio
                             pass
                     
     
-    num_inQueue = b3f.sqs_check_queue(queue_url)
+    num_inQueue = b3f.sqs_check_queue(queue_url1)
     inst_dict = b3f.ec2_status()
     print('-----------------------------------------------')
     print('after evaluate queue, the result is followings:')

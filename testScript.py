@@ -1,58 +1,28 @@
 import master5mp as m5
 import queue_delete_msg as qdm
-import result_log as rl
+import result_log as result_log
 from boto3function import Boto3Function
 import time
 import queue_delete_msg
-
-should_stop = 0
-
+import ast
 import threading
 
-def print_message():
-    t = 15
-    while should_stop == 0:
-        b3f = Boto3Function('us-east-1')
-        inst_dict = b3f.ec2_status()
-        names = []
-        status = []
-        print('----------------------------------------------------------------------------------------')
-        for key, value in inst_dict.items():
-            #print(f'Instance name: {key}, Instance ID: {value[0]}, Running status: {value[1]}')
-            if 'Worker' in key:
-                #print(f'Instance name: {key}, Running status: {value[1]}')
-                print(f'Instance name: {key}, Instance ID: {value[0]}, Running status: {value[1]}')
-        print('----------------------------------------------------------------------------------------')
-        time.sleep(t)
+file_name, queue_url1, region_name1, queue_url2, region_name2, time_for_evaluate, step_spin, git_url, git_foldName
+randF, randT, time_before_print_process, time_before_resend, parallel
+spare_workerid, special_workerid, normal_workerid, always_on
+
+stop_print_instance_status = 0
     
-
-
-
 def main():
+    
     time.sleep(2)
-    global should_stop
 
-    #******************************************************************************
-
-    # design metrix and number of package
     m1 = 40
     n1 = m1
     m2 = m1
     n2 = m1
-    #partition = (m1*n2)//1
     partition = 3000
-
-    # config mode
-    #method = 'addition'
     method = 'multiplication'
-    parallel = True
-
-
-    # config URL
-    queue_url1 = 'https://sqs.us-east-1.amazonaws.com/183243280383/queue_to_worker'
-    region_name1 = 'us-east-1'
-    queue_url2 = 'https://sqs.us-east-1.amazonaws.com/183243280383/queue_to_master'
-    region_name2 = 'us-east-1' 
 
     print('-----------------------------------------------')
     # delete everything inqueue befoer perform command
@@ -61,124 +31,20 @@ def main():
     queue_delete_msg.delete_msg(queue_url2, region_name2)
     print('    finish')
 
-    #******************************************************************************
+    #******************************************************************************  
+    for id in spare_workerid:
+        TE_stopEC2(id)
 
-    b3f = Boto3Function(region_name1)
-    inst_dict = b3f.ec2_status()    
-
-    inst_worker_id = {
-        '1':'i-0a583c0ad764b4926',
-        '2':'i-055336f9cd0657c5c',
-        '3':'i-08fa110b2324b11c5',
-        '4':'i-0d4f2d3a0d1f239bb',
-        '5':'i-0faf62a75a784809a',
-        '6':'i-011e5c83dd72ef526',
-        '7':'i-0c2111a6e13bc4637',
-        '8':'i-068cd621413f03c08'
-        }
-    always_on = [inst_worker_id['1'], inst_worker_id['2'], inst_worker_id['3']]
-    start_by_off = [inst_worker_id['4'], inst_worker_id['5'], inst_worker_id['6'], inst_worker_id['7'], inst_worker_id['8']]
-    #start_by_off = []
-    id_cowork = [inst_worker_id['1']]
-    id_list = [inst_worker_id['2'], inst_worker_id['3']]
-    #id_list = ['i-055336f9cd0657c5c']
+    if len(special_workerid) >0:
+        for id in special_workerid:
+            TE_stopW(id)
+            TE_startEC2(id)
+            TE_startW(id, method, True)
     
-    fileName = 'worker6.py'
-    git_url = 'https://github.com/kign17019999/github-cc.git'
-    git_foldName = 'github-cc'
-    
-    for id in always_on:
-        status1 = ""
-        while status1 != 'yes':
-            try:
-                b3f.stop_worker(
-                    target_instance_id = id, 
-                    file_name = fileName, 
-                    method = method, 
-                    queue_url1 = queue_url1, 
-                    region_name1 = region_name1, 
-                    queue_url2 = queue_url2, 
-                    region_name2 = region_name2, 
-                    check_queue = None
-                )
-                status1 = 'yes'
-            except:
-                pass
-
-    for id in always_on:
-        status1 = ""
-        while status1 != 'yes':
-            try:
-                status_on = b3f.ec2_start(id)
-                status1 = 'yes'
-            except:
-                pass
-        status0 = ""
-        while status0 != 'running':
-            inst_dict = b3f.ec2_status()  
-            for key, value in inst_dict.items():
-                if inst_dict[key][0] == id:
-                    print(f'waiting {id} : {inst_dict[key][1]}')
-                    status0 = inst_dict[key][1]
-
-
-    for id in start_by_off:
-        status_off = b3f.ec2_stop(id)
-
-    if len(id_cowork) >0:
-        status1 = ""
-        while status1 != 'yes':
-            try:
-                b3f.inst_updateGit(
-                    target_instance_id = id_cowork[0], 
-                    git_url = git_url, 
-                    git_foldName = git_foldName
-                    )
-                status1 = 'yes'
-            except:
-                pass
-        time.sleep(1)
-        b3f.inst_init_setup(id_cowork[0])
-        time.sleep(1)
-        b3f.start_worker(
-            target_instance_id = id_cowork[0], 
-            file_name = fileName, 
-            method = method, 
-            queue_url1 = queue_url1, 
-            region_name1 = region_name1, 
-            queue_url2 = queue_url2, 
-            region_name2 = region_name2, 
-            check_queue = True
-            )
-
-    
-    for id in id_list:
-        status1 = ""
-        while status1 != 'yes':
-            try:
-                b3f.inst_updateGit(
-                    target_instance_id = id, 
-                    git_url = git_url, 
-                    git_foldName = git_foldName
-                    )
-                status1 = 'yes'
-            except:
-                pass
-
-        b3f.inst_init_setup(id)
-
-    for id in id_list:
-        time.sleep(1)
-        b3f.start_worker(
-            target_instance_id = id, 
-            file_name = fileName, 
-            method = method, 
-            queue_url1 = queue_url1, 
-            region_name1 = region_name1, 
-            queue_url2 = queue_url2, 
-            region_name2 = region_name2, 
-            check_queue = None
-        )
+    for id in normal_workerid:
+        TE_stopW(id)
+        TE_startEC2(id)
+        TE_startW(id, method, None)
 
     result = m5.master(
         method = method,
@@ -191,41 +57,210 @@ def main():
         n1 = n1, 
         m2 = m2, 
         n2 = n2, 
-        randF=0, randT=10, 
-        time_before_print_process=5, time_before_resend=15,
+        randF = randF,
+        randT = randT, 
+        time_before_print_process = time_before_print_process,
+        time_before_resend = time_before_resend,
         parallel = parallel
     )
 
-    rl.add_or_create_log(
+    result_log.add_or_create_log(
         fileName='system_mp_log.csv',
         fileDir='/home/ec2-user/github-cc/',
         dict_data=result
     )
 
-    #exec(open("ssm_stop_w3a.py").read())
-    for id in always_on:
-        status1 = ""
-        while status1 != 'yes':
+    print('-----------------------------------------------')
+    # delete everything inqueue befoer perform command
+    queue_delete_msg.delete_msg(queue_url1, region_name1)
+    print('    finish')
+    queue_delete_msg.delete_msg(queue_url2, region_name2)
+    print('    finish')
+
+
+    stop_print_instance_status = 1
+
+def TE_startW(id, method, check_queue):
+    b3f = Boto3Function(region_name1)
+    status =""
+    while status != 'yes':
+        try:
+            b3f.inst_updateGit(
+                target_instance_id = id, 
+                git_url = git_url, 
+                git_foldName = git_foldName
+            )
+            status = 'yes'
+        except:
+            pass
+
+    time.sleep(1)
+    status =""
+    while status != 'yes':
+        try:
+            b3f.inst_init_setup(id)
+            status = 'yes'
+        except:
+            pass
+
+    time.sleep(1)
+    status = ""
+    while status != 'yes':
+        try:
+            b3f.start_worker(
+                target_instance_id = id, 
+                file_name = file_name, 
+                method = method, 
+                queue_url1 = queue_url1, 
+                region_name1 = region_name1, 
+                queue_url2 = queue_url2, 
+                region_name2 = region_name2, 
+                check_queue = check_queue,
+                time_for_evaluate = time_for_evaluate,
+                step_spin= step_spin,
+                git_url= git_url,
+                git_foldName= git_foldName,
+                always_on= always_on
+            )
+            status = 'yes'
+        except:
+            pass
+
+def TE_stopW(id):
+    b3f = Boto3Function(region_name1)
+    status = ""
+    while status != 'yes':
+        try:
+            b3f.stop_worker(
+                target_instance_id = id, 
+                file_name = file_name, 
+            )
+            status = 'yes'
+        except:
+            pass
+
+def TE_startEC2(id):
+    b3f = Boto3Function(region_name1)
+    status = ""
+    while status != 'yes':
+        try:
+            status_on = b3f.ec2_start(id)
+            status = 'yes'
+        except:
+            pass
+
+    status = ""
+    while status != 'running':
+        inst_dict = b3f.ec2_status()  
+        for key, value in inst_dict.items():
+            if inst_dict[key][0] == id:
+                print(f'waiting {id} : {inst_dict[key][1]}')
+                status = inst_dict[key][1]
+
+def TE_stopEC2(id):
+    b3f = Boto3Function(region_name1)
+    status = ""
+    while status != 'yes':
+        try:
+            status_on = b3f.ec2_stop(id)
+            status = 'yes'
+        except:
+            pass
+
+
+def import_config():
+
+    global stop_print_instance_status
+    global file_name
+    global queue_url1, region_name1, queue_url2, region_name2
+    global time_for_evaluate, step_spin
+    global git_url, git_foldName
+    global always_on
+    global randF
+    global randT
+    global time_before_print_process
+    global time_before_resend
+    global parallel
+    global spare_workerid
+    global special_workerid
+    global normal_workerid
+    global always_on
+
+    # Open the file in read mode
+    with open('config.conf', 'r') as f:
+        # Read the lines of the file into a list
+        lines = f.readlines()
+
+    # Initialize an empty dictionary to store the parameters
+    params = {}
+
+    # Iterate over the lines in the file
+    for line in lines:
+        # Split the line into a list of words
+        words = line.split("=")
+
+        # Extract the parameter name and value from the words
+        param_name = words[0]
+        param_value = words[1]
+
+        # Strip the quotes from the value, if necessary
+        if param_value[0] == "'" or param_value[0] == '"':
+            param_value = param_value[1:-1]
+
+        # Convert the value to the appropriate data type
+        if param_value == "True":
+            param_value = True
+        elif param_value == "False":
+            param_value = False
+        elif param_value.isdigit():
+            param_value = int(param_value)
+        else:
             try:
-                b3f.stop_worker(
-                    target_instance_id = id, 
-                    file_name = fileName, 
-                    method = method, 
-                    queue_url1 = queue_url1, 
-                    region_name1 = region_name1, 
-                    queue_url2 = queue_url2, 
-                    region_name2 = region_name2, 
-                    check_queue = None
-                )
-                status1 = 'yes'
+                # Use ast.literal_eval to try to parse the value as a list
+                param_value = ast.literal_eval(param_value)
             except:
-                pass
+                # If ast.literal_eval raises a ValueError, treat the value as a string
+                param_value=param_value[:-1]
 
+        # Add the parameter to the dictionary
+        params[param_name] = param_value
 
-    should_stop = 1
+    file_name = params['file_name']
+    queue_url1 = params['queue_url1']
+    region_name1 = params['region_name1']
+    queue_url2 = params['queue_url2']
+    region_name2 = params['region_name2']
+    time_for_evaluate = params['time_for_evaluate']
+    step_spin = params['step_spin']
+    git_url = params['git_url']
+    git_foldName = params['git_foldName']
+    always_on = params['always_on']
+
+    randF = params['randF']
+    randT = params['randT']
+    time_before_print_process = params['time_before_print_process']
+    time_before_resend = params['time_before_resend']
+    parallel = params['parallel']
+
+    spare_workerid = params['spare_workerid']
+    special_workerid = params['special_workerid']
+    normal_workerid = params['normal_workerid']
+    always_on = params['always_on']
+
+def print_instance_status():
+    while stop_print_instance_status == 0:
+        b3f = Boto3Function('us-east-1')
+        inst_dict = b3f.ec2_status()
+        print('----------------------------------------------------------------------------------------')
+        for key, value in inst_dict.items():
+            #print(f'Instance name: {key}, Instance ID: {value[0]}, Running status: {value[1]}')
+            if 'Worker' in key:
+                print(f'Instance name: {key}, Instance ID: {value[0]}, Running status: {value[1]}')
+        print('----------------------------------------------------------------------------------------')
+        time.sleep(time_before_resend)
 
 if __name__ == '__main__':
     
-    thread = threading.Thread(target=print_message)
+    thread = threading.Thread(target=print_instance_status)
     thread.start()
     main()

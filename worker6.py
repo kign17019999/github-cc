@@ -6,9 +6,7 @@ import sys
 import time
 import __main__
 
-time_before_evaluate_queue = 10
-
-def worker(method, queue_url1, region_name1, queue_url2, region_name2, check_queue = None):
+def worker(method, queue_url1, region_name1, queue_url2, region_name2, check_queue = None, time_for_evaluate = 10):
     #print(f'check_queue = {check_queue}')
     sqs_function1 = SQSFunction(queue_url1, region_name1)
     sqs_function2 = SQSFunction(queue_url2, region_name2)
@@ -35,7 +33,7 @@ def worker(method, queue_url1, region_name1, queue_url2, region_name2, check_que
             count+=1
             print(f'    {count}: Done process & Sent result with msg_id: {message_id}')
         if check_queue == str(True):
-            if time.time() - start_time > time_before_evaluate_queue:
+            if time.time() - start_time > time_for_evaluate:
                 evaluate_queue.evaluate_queue(str(__main__.__file__), method, queue_url1, region_name1, queue_url2, region_name2)
                 start_time = time.time()
         #time.sleep(0.5)
@@ -70,5 +68,6 @@ if __name__ == '__main__':
             region_name1 = result_dict['region_name1'],
             queue_url2 = result_dict['queue_url2'],
             region_name2 = result_dict['region_name2'],
-            check_queue = result_dict['check_queue'].rstrip()
+            check_queue = result_dict['check_queue'].rstrip(),
+            time_for_evaluate = int(result_dict['time_for_evaluate'].rstrip())
             )
