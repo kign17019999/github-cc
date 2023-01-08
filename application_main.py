@@ -5,26 +5,18 @@ from boto3function import Boto3Function
 import time
 import queue_delete_msg
 import ast
-import threading
+#import threading
+import sys
 
 global file_name, queue_url1, region_name1, queue_url2, region_name2, time_for_evaluate, step_spin, git_url, git_foldName
 global randF, randT, time_before_print_process, time_before_resend, parallel
 global spare_workerid, special_workerid, normal_workerid, always_on
 
-stop_print_instance_status = 1
+#stop_print_instance_status = 1
     
-def main():
-    global stop_print_instance_status
-
+def main(method, m1, n1, m2, n2, partition):
+    #global stop_print_instance_status
     time.sleep(2)
-
-    m1 = 50
-    n1 = m1
-    m2 = m1
-    n2 = m1
-    partition = 10000
-    method = 'multiplication'
-
     print('-----------------------------------------------')
     # delete everything inqueue befoer perform command
     queue_delete_msg.delete_msg(queue_url1, region_name1)
@@ -47,7 +39,7 @@ def main():
         TE_startEC2(id)
         TE_startW(id, method, None)
 
-    stop_print_instance_status = 1
+    #stop_print_instance_status = 1
 
     result = m5.master(
         method = method,
@@ -81,7 +73,7 @@ def main():
     print('    finish')
 
 
-    stop_print_instance_status = 1
+    #stop_print_instance_status = 1
 
 def TE_startW(id, method, check_queue):
     b3f = Boto3Function(region_name1)
@@ -257,7 +249,7 @@ def import_config():
     print(f'special_workerid: {special_workerid}')
     print(f'normal_workerid : {normal_workerid}')
     print(f'always_on : {always_on}')
-    print(f'step-msg to spin new worker : {step_spin}s in Queue')
+    print(f'step-msg to spin new worker : more than {step_spin} msgs in Queue')
 
 def print_instance_status():
     b3f = Boto3Function('us-east-1')
@@ -286,8 +278,18 @@ def print_instance_status():
             print('----------------------------------------------------------------------------------------')
             start_time = time.time()
 
+def input_function(text_to_inpit):
+    # Keep prompting the user for input until they enter a non-empty string
+    while True:
+        user_input = input(f"{text_to_inpit}: ")
+        if user_input.strip():  # Check if the string is not just whitespace
+            break
+        else:
+            break
+    return user_input
 
 if __name__ == '__main__':
+    
     import_config()
     b3f = Boto3Function('us-east-1')
     inst_dict = b3f.ec2_status()
@@ -298,4 +300,54 @@ if __name__ == '__main__':
     print('----------------------------------------------------------------------------------------')
     #thread = threading.Thread(target=print_instance_status)
     #thread.start()
-    main()
+    #main()
+    
+
+    try:
+        method = sys.argv[1]
+        m1 = sys.argv[2]
+        n1 = sys.argv[3]
+        m2 = sys.argv[4]
+        n2 = sys.argv[5]
+        partition = sys.argv[6]
+        main(method, m1, n1, m2, n2, partition)
+
+    except:
+        print('Welcome to our appliaction')
+        while True:
+            method_str = input_function('INPUT "addition" or "multiplication"')
+            if method_str == 'addition' or method_str == 'multiplication':
+                break
+        while True:
+            m1_str = input_function('INPUT a number of ROW size of matrix 1 (m1)')
+            if m1_str.isdigit():
+                break
+        while True:
+            n1_str = input_function('INPUT a number of COLUMN size of matrix 1 (n1)')
+            if n1_str.isdigit():
+                break
+        if method_str == 'addition':
+            m2_str = m1_str
+            n2_str = m1_str
+            print('m2 and n2 or matrix 2 are forced to be the same with Matrix 1')
+        else:
+            m2_str = n1_str
+            print('m2 matrix 2 is forced to be the same with n1 of Matrix 1')
+            while True:
+                n2_str = input_function('INPUT a number of COLUMN size of matrix 2 (n2)')
+                if n2_str.isdigit():
+                    break
+        while True:
+            parition_str = input_function('INPUT a number of desired number of packages')
+            if parition_str.isdigit():
+                break
+
+        method = method_str
+        m1 = int(m1_str)
+        n1 = int(n1_str)
+        m2 = int(m2_str)
+        n2 = int(n2_str)
+        parition = int(parition_str)
+        print(type(parition))
+        print(type(m2))
+        main(method, m1, n1, m2, n2, partition)

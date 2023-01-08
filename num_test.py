@@ -55,3 +55,6 @@ def import_config():
         print(f'{key} : {value}')
     print(type(params['always_on']))
 import_config()
+
+aa = {'1':1, '2':2}
+print(len(aa))
