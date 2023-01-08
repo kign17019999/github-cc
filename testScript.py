@@ -7,21 +7,22 @@ import queue_delete_msg
 import ast
 import threading
 
-file_name, queue_url1, region_name1, queue_url2, region_name2, time_for_evaluate, step_spin, git_url, git_foldName
-randF, randT, time_before_print_process, time_before_resend, parallel
-spare_workerid, special_workerid, normal_workerid, always_on
+global file_name, queue_url1, region_name1, queue_url2, region_name2, time_for_evaluate, step_spin, git_url, git_foldName
+global randF, randT, time_before_print_process, time_before_resend, parallel
+global spare_workerid, special_workerid, normal_workerid, always_on
 
 stop_print_instance_status = 0
     
 def main():
+    global stop_print_instance_status
 
     time.sleep(2)
 
-    m1 = 40
+    m1 = 50
     n1 = m1
     m2 = m1
     n2 = m1
-    partition = 3000
+    partition = 10000
     method = 'multiplication'
 
     print('-----------------------------------------------')
