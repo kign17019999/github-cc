@@ -1,4 +1,4 @@
-import master5mp as m5
+import main_master as master
 import queue_delete_msg as qdm
 import result_log as result_log
 from boto3function import Boto3Function
@@ -45,7 +45,7 @@ def main(method, m1, n1, m2, n2, partition):
 
     #stop_print_instance_status = 1
 
-    result = m5.master(
+    result = master.master(
         method = method,
         queue_url1 = queue_url1, 
         region_name1 = region_name1, 
@@ -64,7 +64,7 @@ def main(method, m1, n1, m2, n2, partition):
     )
 
     result_log.add_or_create_log(
-        fileName='system_mp_log.csv',
+        fileName='log_result.csv',
         fileDir='/home/ec2-user/github-cc/',
         dict_data=result
     )
