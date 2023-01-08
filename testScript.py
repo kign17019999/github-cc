@@ -159,6 +159,8 @@ def TE_startEC2(id):
 
 def TE_stopEC2(id):
     b3f = Boto3Function(region_name1)
+    status_on = b3f.ec2_stop(id)
+    '''
     status = ""
     while status != 'yes':
         try:
@@ -166,7 +168,7 @@ def TE_stopEC2(id):
             status = 'yes'
         except:
             pass
-
+    '''
 
 def import_config():
 
