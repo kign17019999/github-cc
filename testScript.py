@@ -254,11 +254,12 @@ def import_config():
     special_workerid = params['special_workerid']
     normal_workerid = params['normal_workerid']
     always_on = params['always_on']
-
+    print('----------------------------------------------------------------------------------------')
     print(f'spare_workerid  : {spare_workerid}')
     print(f'special_workerid: {special_workerid}')
     print(f'normal_workerid : {normal_workerid}')
     print(f'always_on : {always_on}')
+    print(f'step new worker : {step_spin}')
 
 def print_instance_status():
     b3f = Boto3Function('us-east-1')

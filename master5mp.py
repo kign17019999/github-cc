@@ -234,10 +234,10 @@ def send_msg(method, m1, n1, m2, n2, partition, time_before_print_process, pack_
         # checking the time before print progress
         if time.time()-start_time > time_before_print_process:
             start_time = time.time()
-            print(f'    trying to send...{i}/{partition} pakages')
+            print(f'    (SEND) trying to send...{i}/{partition} pakages')
     
     stop_time_for_sending = time.time()
-    print(f'    finishing sending...{partition}/{partition} pakages')
+    print(f'    (SEND) finishing sending...{partition}/{partition} pakages')
 
     # summary sending time
     time_for_sending = stop_time_for_sending - start_time_for_sending
@@ -328,8 +328,8 @@ def get_results(method, mp, dict_of_matrixs, time_before_resend, time_before_pri
                 count_resend+=1
                 if time.time()-start_time_resend > time_before_print_process:
                     start_time_resend = time.time()
-                    print(f'        trying to resending...{count_resend}/{count_num_for_resend} sub-pair')
-            print(f'        finish resending...{count_resend}/{count_num_for_resend} sub-pair')
+                    print(f'        (RESENT) trying to resending...{count_resend}/{count_num_for_resend} sub-pair')
+            print(f'        (RESENT) finish resending...{count_resend}/{count_num_for_resend} sub-pair')
             if count_resend > 0:
                 # timing before resending process (reset after finish previous resend)
                 no_msg_time = time.time()
@@ -339,7 +339,7 @@ def get_results(method, mp, dict_of_matrixs, time_before_resend, time_before_pri
         # check time before update the progress
         if time.time()-start_time > time_before_print_process:
             start_time = time.time()
-            print(f'    trying to get results...{count_get}/{partition} packages | {count_get_result}/{want_result} sub-result')
+            print(f'    (GET) trying to get results...{count_get}/{partition} packages | {count_get_result}/{want_result} sub-result')
             
             inst_dict = b3f.ec2_status()
             num_running_instance = 0
@@ -355,9 +355,11 @@ def get_results(method, mp, dict_of_matrixs, time_before_resend, time_before_pri
             log_time.append(start_time)
 
             if time.time() - start_time_progress > time_before_resend:
-                print(f'* running workers   = {num_running_instance} instances')
-                print(f'* msg to worker     = {num_inQueue_worker} message')
-                print(f'* msg to master     = {num_inQueue_master} message')
+                print('----------------------------------------------------------------------------------------')
+                print(f'* {num_running_instance}    workers are running')
+                print(f'* {num_inQueue_worker[1]}   msg to worker')
+                print(f'* {num_inQueue_master[1]}   msg to master')
+                print('----------------------------------------------------------------------------------------')
                 start_time_progress = time.time()
                 
 
@@ -366,7 +368,7 @@ def get_results(method, mp, dict_of_matrixs, time_before_resend, time_before_pri
             break
     
     stop_time_getting_result = time.time()
-    print(f'    finish getting all result & combining...{count_get}/{partition} packages | {count_get_result}/{want_result} sub-result') 
+    print(f'    (GET) finish getting all result & combining...{count_get}/{partition} packages | {count_get_result}/{want_result} sub-result') 
 
     time_for_getting_result = stop_time_getting_result - start_time_getting_result
 
@@ -376,6 +378,24 @@ def get_results(method, mp, dict_of_matrixs, time_before_resend, time_before_pri
     elif method == 'multiplication':
         final_result = mp.get_result_multiplication()
 
+    inst_dict = b3f.ec2_status()
+    num_running_instance = 0
+    for key, value in inst_dict.items():
+        if 'Worker' in key and value[1] == 'running':
+            num_running_instance +=1
+    num_inQueue_worker = b3f.sqs_check_queue(queue_url1)
+    num_inQueue_master = b3f.sqs_check_queue(queue_url2)
+
+    log_msg_in_queue_worker.append(num_inQueue_worker[1])
+    log_msg_in_queue_master.append(num_inQueue_master[1])
+    log_num_instance.append(num_running_instance)
+    log_time.append(start_time) 
+    print('----------------------------------------------------------------------------------------')
+    print(f'* {num_running_instance}    workers are running')
+    print(f'* {num_inQueue_worker[1]}   msg to worker')
+    print(f'* {num_inQueue_master[1]}   msg to master')
+    print('----------------------------------------------------------------------------------------')
+    start_time_progress = time.time()
     log_during_combining = [log_msg_in_queue_worker, log_msg_in_queue_master, log_num_instance, log_time]
     return final_result, time_for_getting_result, log_during_combining
 
