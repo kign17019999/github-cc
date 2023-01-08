@@ -343,7 +343,7 @@ if __name__ == '__main__':
                 break
         if method_str == 'addition':
             m2_str = m1_str
-            n2_str = m1_str
+            n2_str = n1_str
             print('>> m2 and n2 or matrix 2 are forced to be the same with Matrix 1')
         else:
             m2_str = n1_str
