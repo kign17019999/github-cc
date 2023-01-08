@@ -329,10 +329,10 @@ if __name__ == '__main__':
         if method_str == 'addition':
             m2_str = m1_str
             n2_str = m1_str
-            print('m2 and n2 or matrix 2 are forced to be the same with Matrix 1')
+            print('>> m2 and n2 or matrix 2 are forced to be the same with Matrix 1')
         else:
             m2_str = n1_str
-            print('m2 matrix 2 is forced to be the same with n1 of Matrix 1')
+            print('>> m2 matrix 2 is forced to be the same with n1 of Matrix 1')
             while True:
                 n2_str = input_function('INPUT a number of COLUMN size of matrix 2 (n2)')
                 if n2_str.isdigit():
@@ -347,7 +347,5 @@ if __name__ == '__main__':
         n1 = int(n1_str)
         m2 = int(m2_str)
         n2 = int(n2_str)
-        parition = int(parition_str)
-        print(type(parition))
-        print(type(m2))
+        partition = int(parition_str)
         main(method, m1, n1, m2, n2, partition)
