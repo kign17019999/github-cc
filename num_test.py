@@ -53,5 +53,5 @@ def import_config():
 
     for key,value in params.items():
         print(f'{key} : {value}')
-
+    print(type(params['always_on']))
 import_config()

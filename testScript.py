@@ -250,6 +250,7 @@ def import_config():
     print(f'spare_workerid  : {spare_workerid}')
     print(f'special_workerid: {special_workerid}')
     print(f'normal_workerid : {normal_workerid}')
+    print(f'always_on : {always_on}')
 
 def print_instance_status():
     while stop_print_instance_status == 0:
