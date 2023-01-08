@@ -14,7 +14,7 @@ spare_workerid, special_workerid, normal_workerid, always_on
 stop_print_instance_status = 0
     
 def main():
-    
+
     time.sleep(2)
 
     m1 = 40
@@ -260,7 +260,7 @@ def print_instance_status():
         time.sleep(time_before_resend)
 
 if __name__ == '__main__':
-    
+    import_config()
     thread = threading.Thread(target=print_instance_status)
     thread.start()
     main()
