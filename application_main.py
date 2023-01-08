@@ -288,6 +288,17 @@ def input_function(text_to_inpit):
             break
     return user_input
 
+def function_for_test(method, m1, n1, m2, n2, partition):
+    import_config()
+    b3f = Boto3Function('us-east-1')
+    inst_dict = b3f.ec2_status()
+    print('----------------------------------------------------------------------------------------')
+    for key, value in inst_dict.items():
+        if 'Worker' in key:
+            print(f'Instance name: {key}, Instance ID: {value[0]}, Running status: {value[1]}')
+    print('----------------------------------------------------------------------------------------')
+    main(method, m1, n1, m2, n2, partition)
+
 if __name__ == '__main__':
     
     import_config()
