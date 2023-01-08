@@ -3,8 +3,8 @@ import result_log as result_log
 
 def main():
     method = 'addition'
-    for m1 in range(1000, 10000+1, 500):
-        for parition in range(1000, 10000+1, 1000):
+    for m1 in range(1000, 3000+1, 500):
+        for parition in range(50, 10000+1, 1000):
             try:
                 application_main_for_test_script.function_for_test(method, m1, m1, m1, m1, parition)
             except Exception as e:
