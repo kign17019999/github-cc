@@ -15,6 +15,10 @@ global spare_workerid, special_workerid, normal_workerid, always_on
 #stop_print_instance_status = 1
     
 def main(method, m1, n1, m2, n2, partition):
+    print(f'method = {method}')
+    print(f'matrix 1 size = {m1}x{n1}')
+    print(f'matrix 2 size = {m2}x{n2}')
+    print(f'number of packages = {partition}')
     #global stop_print_instance_status
     time.sleep(2)
     print('-----------------------------------------------')
