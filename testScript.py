@@ -11,7 +11,7 @@ global file_name, queue_url1, region_name1, queue_url2, region_name2, time_for_e
 global randF, randT, time_before_print_process, time_before_resend, parallel
 global spare_workerid, special_workerid, normal_workerid, always_on
 
-stop_print_instance_status = 0
+stop_print_instance_status = 1
     
 def main():
     global stop_print_instance_status
@@ -49,6 +49,8 @@ def main():
         TE_startEC2(id)
         TE_startW(id, method, None)
 
+    stop_print_instance_status = 1
+    
     result = m5.master(
         method = method,
         queue_url1 = queue_url1, 
@@ -259,16 +261,31 @@ def import_config():
     print(f'always_on : {always_on}')
 
 def print_instance_status():
+    b3f = Boto3Function('us-east-1')
+    print('----------------------------------------------------------------------------------------')
+    for key, value in inst_dict.items():
+        if 'Worker' in key:
+            print(f'Instance name: {key}, Instance ID: {value[0]}, Running status: {value[1]}')
+    print('----------------------------------------------------------------------------------------')
+
+    while stop_print_instance_status == 1:
+        pass
+    start_time = time.time()
     while stop_print_instance_status == 0:
-        b3f = Boto3Function('us-east-1')
         inst_dict = b3f.ec2_status()
         print('----------------------------------------------------------------------------------------')
         for key, value in inst_dict.items():
-            #print(f'Instance name: {key}, Instance ID: {value[0]}, Running status: {value[1]}')
             if 'Worker' in key:
                 print(f'Instance name: {key}, Instance ID: {value[0]}, Running status: {value[1]}')
         print('----------------------------------------------------------------------------------------')
-        time.sleep(time_before_resend)
+        if(time.time()-start_time>time_before_resend):
+            print('----------------------------------------------------------------------------------------')
+            for key, value in inst_dict.items():
+                if 'Worker' in key:
+                    print(f'Instance name: {key}, Instance ID: {value[0]}, Running status: {value[1]}')
+            print('----------------------------------------------------------------------------------------')
+            start_time = time.time()
+
 
 if __name__ == '__main__':
     import_config()
