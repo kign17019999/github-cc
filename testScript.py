@@ -146,8 +146,8 @@ def TE_startEC2(id):
         try:
             status_on = b3f.ec2_start(id)
             status = 'yes'
-        except:
-            pass
+        except Exception as e:
+            print(e)
 
     status = ""
     while status != 'running':
