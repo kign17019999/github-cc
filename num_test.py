@@ -40,7 +40,7 @@ def import_config():
         params[param_name] = param_value
 
     # Print the parameters
-    
+    '''
     print(type(params))
     print(params['always_on'])
     print(type(params['always_on']))
@@ -49,4 +49,9 @@ def import_config():
     print(params['randF'])
     print(params['parallel'])
     print(params['file_name'])
+    '''
+
+    for key,value in params.items():
+        print(f'{key} : {value}')
+
 import_config()
