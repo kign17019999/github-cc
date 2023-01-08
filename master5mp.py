@@ -113,6 +113,13 @@ def master(method, queue_url1, region_name1, queue_url2, region_name2, partition
     print(f'>> total time distibuted system : {stop_time_all-start_time_all} s {parallel_word}')
     print(f'>> total time local system      : {stop_time_local-start_time_local} s')
     print('-----------------------------------------------')
+
+    print('-----------------------------------------------')
+    np.savetxt("result_dist.csv", final_result, delimiter=",", fmt="%.3f")
+    np.savetxt("result_local.csv", result_with_local, delimiter=",", fmt="%.3f")
+    print(f'>> saving latest dist-result in  "result_dist.csv"')
+    print(f'>> saving latest dist-result in  "result_local.csv"')
+    print('-----------------------------------------------')
     print('* * * * * end * * * * *')
     
     #log_during_combining = [log_msg_in_queue_worker, log_msg_in_queue_master, log_num_instance, log_time]
@@ -343,9 +350,12 @@ def get_results(method, mp, dict_of_matrixs, time_before_resend, time_before_pri
             
             inst_dict = b3f.ec2_status()
             num_running_instance = 0
+            num_starting_instance = 0
             for key, value in inst_dict.items():
                 if 'Worker' in key and value[1] == 'running':
                     num_running_instance +=1
+                if 'Worker' in key and value[1] == 'pending':
+                    num_starting_instance +=1
             num_inQueue_worker = b3f.sqs_check_queue(queue_url1)
             num_inQueue_master = b3f.sqs_check_queue(queue_url2)
 
@@ -356,9 +366,10 @@ def get_results(method, mp, dict_of_matrixs, time_before_resend, time_before_pri
 
             if time.time() - start_time_progress > time_before_resend:
                 print('----------------------------------------------------------------------------------------')
-                print(f'* {num_running_instance}    workers are running')
-                print(f'* {num_inQueue_worker[1]}   msg to worker')
-                print(f'* {num_inQueue_master[1]}   msg to master')
+                print(f'* {num_running_instance} workers are running')
+                print(f'* {num_starting_instance} workers try to start')
+                print(f'* {num_inQueue_worker[1]} msg to worker')
+                print(f'* {num_inQueue_master[1]} msg to master')
                 print('----------------------------------------------------------------------------------------')
                 start_time_progress = time.time()
                 
@@ -380,9 +391,12 @@ def get_results(method, mp, dict_of_matrixs, time_before_resend, time_before_pri
 
     inst_dict = b3f.ec2_status()
     num_running_instance = 0
+    num_starting_instance = 0
     for key, value in inst_dict.items():
         if 'Worker' in key and value[1] == 'running':
             num_running_instance +=1
+        if 'Worker' in key and value[1] == 'pending':
+            num_starting_instance +=1
     num_inQueue_worker = b3f.sqs_check_queue(queue_url1)
     num_inQueue_master = b3f.sqs_check_queue(queue_url2)
 
@@ -391,12 +405,14 @@ def get_results(method, mp, dict_of_matrixs, time_before_resend, time_before_pri
     log_num_instance.append(num_running_instance)
     log_time.append(start_time) 
     print('----------------------------------------------------------------------------------------')
-    print(f'* {num_running_instance}    workers are running')
-    print(f'* {num_inQueue_worker[1]}   msg to worker')
-    print(f'* {num_inQueue_master[1]}   msg to master')
+    print(f'* {num_running_instance} workers are running')
+    print(f'* {num_starting_instance} workers try to start')
+    print(f'* {num_inQueue_worker[1]} msg to worker')
+    print(f'* {num_inQueue_master[1]} msg to master')
     print('----------------------------------------------------------------------------------------')
     start_time_progress = time.time()
     log_during_combining = [log_msg_in_queue_worker, log_msg_in_queue_master, log_num_instance, log_time]
+
     return final_result, time_for_getting_result, log_during_combining
 
 if __name__ == '__main__':

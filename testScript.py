@@ -28,9 +28,7 @@ def main():
     print('-----------------------------------------------')
     # delete everything inqueue befoer perform command
     queue_delete_msg.delete_msg(queue_url1, region_name1)
-    print('    finish')
     queue_delete_msg.delete_msg(queue_url2, region_name2)
-    print('    finish')
 
     print('stop all spare_worker...')
     for id in spare_workerid:
