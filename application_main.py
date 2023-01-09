@@ -283,7 +283,6 @@ def print_instance_status():
             start_time = time.time()
 
 def input_function(text_to_inpit):
-    # Keep prompting the user for input until they enter a non-empty string
     while True:
         user_input = input(f"{text_to_inpit}: ")
         if user_input.strip():  # Check if the string is not just whitespace
