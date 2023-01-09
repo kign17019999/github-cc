@@ -325,7 +325,8 @@ def get_results(method, mp, dict_of_matrixs, time_before_resend, time_before_pri
         if time.time()-no_msg_time > int(time_before_resend):
             inst_dict = b3f.ec2_status()
             num_inQueue_worker = b3f.sqs_check_queue(queue_url1)
-            if num_inQueue_worker == 0:
+            #if num_inQueue_worker == 0:
+            if True == 0:
                 print(f'    !! no message for {time_before_resend}s and No Msg in Queue, try to check the blank result in Dict_Matrix')
                 # timing for update progress of resending with counting too
                 start_time_resend = time.time()            
