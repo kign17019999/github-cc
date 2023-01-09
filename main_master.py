@@ -322,7 +322,7 @@ def get_results(method, mp, dict_of_matrixs, time_before_resend, time_before_pri
             # timing before resending process (reset after getting first msg)
             no_msg_time = time.time()
         # check no msg time before resending
-        if time.time()-no_msg_time > time_before_resend:
+        if time.time()-no_msg_time > int(time_before_resend):
             inst_dict = b3f.ec2_status()
             num_inQueue_worker = b3f.sqs_check_queue(queue_url1)
             if num_inQueue_worker == 0:
